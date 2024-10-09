@@ -24,20 +24,18 @@ contract TokenDistribuition is OwnableUpgradeable, UUPSUpgradeable {
         address newImplementation
     ) internal override onlyOwner {}
 
-    function buyTokens(address _beneficiary, uint256 bodAmount) public {
+    function buyTokens(address _beneficiary, uint256 usdcAmount) public {
         // 1 USDC = 10 BOD
         //  calculate amount of USDC to be transferred
-        require(bodAmount % 10 == 0, "bodAmount must be a multiple of 10");
-        uint256 amount = bodAmount / 10;
-
+        uint256 bodAmount = usdcAmount * 10;
         //check balance of USDC
-        if (IERC20(USDC).balanceOf(msg.sender) < amount) {
+        if (IERC20(USDC).balanceOf(msg.sender) < usdcAmount) {
             revert insufficientFunds(_beneficiary);
         }
         //buy tokens
-        IERC20(USDC).transferFrom(msg.sender, address(this), amount);
-        IERC20(bodhiToken).transfer(_beneficiary, amount);
+        IERC20(USDC).transferFrom(msg.sender, address(this), usdcAmount);
+        IERC20(bodhiToken).transfer(_beneficiary, bodAmount);
 
-        emit tokensBought(_beneficiary, amount);
+        emit tokensBought(_beneficiary, bodAmount);
     }
 }
