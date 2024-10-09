@@ -1,0 +1,3 @@
+[submodule "contracts/evm/bodhi-evm/lib/forge-std"]
+	path = contracts/evm/bodhi-evm/lib/forge-std
+	url = https://github.com/foundry-rs/forge-std
