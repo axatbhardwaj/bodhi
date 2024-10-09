@@ -19,10 +19,9 @@ contract TokenDistribuition is OwnableUpgradeable, UUPSUpgradeable {
         _disableInitializers(); // Disable initializers to prevent direct calls
     }
 
-    function initialize(address _bodhiTokenAddress) public initializer {
+    function initialize() public initializer {
         __Ownable_init(msg.sender);
         __UUPSUpgradeable_init();
-        setBodhiTokenAddress(_bodhiTokenAddress);
     }
 
     function setBodhiTokenAddress(address _bodhiToken) public onlyOwner {
