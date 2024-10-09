@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.17;
+pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts-upgradeable/token/ERC20/ERC20Upgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
@@ -14,6 +14,8 @@ contract BodhiToken is
     ERC20PermitUpgradeable,
     ERC20PausableUpgradeable
 {
+    address public tokenDistributionContractAddress;
+
     function initialize(
         address _tokenDistributionContractAddress,
         uint256 _initialSupply
@@ -25,6 +27,9 @@ contract BodhiToken is
         __UUPSUpgradeable_init();
         __Ownable_init(msg.sender);
     }
+
+    event tokensMinted(address indexed _beneficiary, uint256 _amount);
+    event tokensBurned(address indexed _beneficiary, uint256 _amount);
 
     function _update(
         address from,
@@ -50,7 +55,7 @@ contract BodhiToken is
         _burn(msg.sender, amount);
     }
 
-    function mint(address recipient, uint256 amount) external onlyOwner {
-        _mint(recipient, amount);
+    function mint(uint256 amount) external onlyOwner {
+        _mint(tokenDistributionContractAddress, amount);
     }
 }
