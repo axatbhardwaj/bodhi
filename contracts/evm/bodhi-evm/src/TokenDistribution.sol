@@ -6,7 +6,6 @@ import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 
-error Unauthorized();
 error insufficientFunds(address _beneficiary);
 
 contract TokenDistribuition is OwnableUpgradeable, UUPSUpgradeable {
@@ -25,7 +24,12 @@ contract TokenDistribuition is OwnableUpgradeable, UUPSUpgradeable {
         address newImplementation
     ) internal override onlyOwner {}
 
-    function buyTokens(address _beneficiary, uint256 amount) public {
+    function buyTokens(address _beneficiary, uint256 bodAmount) public {
+        // 1 USDC = 10 BOD
+        //  calculate amount of USDC to be transferred
+        require(bodAmount % 10 == 0, "bodAmount must be a multiple of 10");
+        uint256 amount = bodAmount / 10;
+
         //check balance of USDC
         if (IERC20(USDC).balanceOf(msg.sender) < amount) {
             revert insufficientFunds(_beneficiary);
