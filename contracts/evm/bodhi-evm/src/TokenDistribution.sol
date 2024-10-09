@@ -15,14 +15,14 @@ contract TokenDistribuition is OwnableUpgradeable, UUPSUpgradeable {
     address public constant USDC = 0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913;
     address public bodhiTokenAddress;
 
-    constructor(address _bodhiToken) {
-        bodhiTokenAddress = _bodhiToken;
+    constructor() {
         _disableInitializers(); // Disable initializers to prevent direct calls
     }
 
-    function initialize() public initializer {
+    function initialize(address _bodhiTokenAddress) public initializer {
         __Ownable_init(msg.sender);
         __UUPSUpgradeable_init();
+        setBodhiTokenAddress(_bodhiTokenAddress);
     }
 
     function setBodhiTokenAddress(address _bodhiToken) public onlyOwner {
