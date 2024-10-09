@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.17;
+pragma solidity ^0.8.0;
 //importing interface of ERC20
 
 import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
@@ -10,9 +10,9 @@ error Unauthorized();
 error insufficientFunds(address _beneficiary);
 
 contract TokenDistribuition is OwnableUpgradeable, UUPSUpgradeable {
-    event boughtTokens(address indexed _beneficiary, uint256 _amount);
+    event tokensBought(address indexed _beneficiary, uint256 _amount);
 
-    //constant variables USDC token address
+    //constant variables USDC token address on base chain
     address public constant USDC = 0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913;
     address public immutable bodhiToken;
 
@@ -27,13 +27,13 @@ contract TokenDistribuition is OwnableUpgradeable, UUPSUpgradeable {
 
     function buyTokens(address _beneficiary, uint256 amount) public {
         //check balance of USDC
-        require(
-            IERC20(USDC).balanceOf(msg.sender) >= amount,
-            insufficientFunds(msg.sender)
-        );
-
+        if (IERC20(USDC).balanceOf(msg.sender) < amount) {
+            revert insufficientFunds(_beneficiary);
+        }
         //buy tokens
         IERC20(USDC).transferFrom(msg.sender, address(this), amount);
         IERC20(bodhiToken).transfer(_beneficiary, amount);
+
+        emit tokensBought(_beneficiary, amount);
     }
 }
