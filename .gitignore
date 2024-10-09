@@ -36,3 +36,21 @@ yarn-error.log*
 # Misc
 .DS_Store
 *.pem
+
+
+#foundry
+contracts/evm/bodhi-evm/lib
+# Compiler files
+contracts/evm/bodhi-evm/cache/
+contracts/evm/bodhi-evm/out/
+
+# Ignores development broadcast logs
+contracts/evm/bodhi-evm/!/broadcast
+contracts/evm/bodhi-evm//broadcast/*/31337/
+contracts/evm/bodhi-evm//broadcast/**/dry-run/
+
+# Docs
+contracts/evm/bodhi-evm/docs/
+
+# Dotenv file
+.env

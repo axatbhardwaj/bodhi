@@ -1,3 +1,18 @@
 [submodule "contracts/evm/bodhi-evm/lib/forge-std"]
 	path = contracts/evm/bodhi-evm/lib/forge-std
 	url = https://github.com/foundry-rs/forge-std
+[submodule "lib/openzeppelin-upgrades"]
+	path = lib/openzeppelin-upgrades
+	url = https://github.com/OpenZeppelin/openzeppelin-upgrades
+[submodule "contracts/evm/bodhi-evm/lib/openzeppelin-upgrades"]
+	path = contracts/evm/bodhi-evm/lib/openzeppelin-upgrades
+	url = https://github.com/OpenZeppelin/openzeppelin-upgrades
+[submodule "contracts/evm/bodhi-evm/lib/openzeppelin-contracts"]
+	path = contracts/evm/bodhi-evm/lib/openzeppelin-contracts
+	url = https://github.com/OpenZeppelin/openzeppelin-contracts
+[submodule "contracts/evm/bodhi-evm/lib/openzeppelin-foundry-upgrades"]
+	path = contracts/evm/bodhi-evm/lib/openzeppelin-foundry-upgrades
+	url = https://github.com/OpenZeppelin/openzeppelin-foundry-upgrades
+[submodule "contracts/evm/bodhi-evm/lib/openzeppelin-contracts-upgradeable"]
+	path = contracts/evm/bodhi-evm/lib/openzeppelin-contracts-upgradeable
+	url = https://github.com/OpenZeppelin/openzeppelin-contracts-upgradeable
