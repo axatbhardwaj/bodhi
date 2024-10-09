@@ -25,6 +25,10 @@ contract TokenDistribuition is OwnableUpgradeable, UUPSUpgradeable {
         __UUPSUpgradeable_init();
     }
 
+    function setBodhiTokenAddress(address _bodhiToken) public onlyOwner {
+        bodhiTokenAddress = _bodhiToken;
+    }
+
     function _authorizeUpgrade(
         address newImplementation
     ) internal override onlyOwner {}
