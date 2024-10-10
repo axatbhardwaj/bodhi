@@ -8,7 +8,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@repo/ui/components/ui/select";
-import { Brain, Moon, Sun, Wallet, LogOut, X, Menu } from "lucide-react";
+import { Brain, Moon, Sun, LogOut, X, Menu } from "lucide-react";
 import Link from "next/link";
 import { useTheme } from "next-themes";
 import TopupDialog from "../Topup";
@@ -48,7 +48,6 @@ export default function ChatHeader({
 
   const handleSignOut = async () => {
     await signOut();
-    router.push("/");
   };
 
   if (!mounted) return null;
@@ -64,10 +63,12 @@ export default function ChatHeader({
         </Link>
         <div className="ml-auto flex items-center">
           <nav className="hidden lg:flex items-center space-x-4">
-            <div className="cursor-pointer hover:text-purple-600" 
-            onClick={()=> {
-              router.push("/dashboard")
-            }}>
+            <div
+              className="cursor-pointer hover:text-purple-600"
+              onClick={() => {
+                router.push("/dashboard");
+              }}
+            >
               Dashboard
             </div>
             <Select value={model} onValueChange={setModel}>
@@ -75,9 +76,24 @@ export default function ChatHeader({
                 <SelectValue placeholder="Select AI Model" />
               </SelectTrigger>
               <SelectContent className="bg-white dark:bg-gray-800 rounded-[4px]">
-                <SelectItem value="gpt-4">GPT-4</SelectItem>
-                <SelectItem value="gemini">Gemini</SelectItem>
-                <SelectItem value="llama">LLaMA</SelectItem>
+                <SelectItem
+                  className="cursor-pointer hover:text-purple-600"
+                  value="gpt-4"
+                >
+                  GPT-4
+                </SelectItem>
+                <SelectItem
+                  className="cursor-pointer hover:text-purple-600"
+                  value="gemini"
+                >
+                  Gemini
+                </SelectItem>
+                <SelectItem
+                  className="cursor-pointer hover:text-purple-600"
+                  value="llama"
+                >
+                  LLaMA
+                </SelectItem>
               </SelectContent>
             </Select>
             <TokenUsage
@@ -104,9 +120,9 @@ export default function ChatHeader({
           >
             {mounted &&
               (isDarkMode ? (
-                <Sun className="h-5 w-5" />
+                <Sun className="h-5 w-5 hover:text-purple-600" />
               ) : (
-                <Moon className="h-5 w-5" />
+                <Moon className="h-5 w-5 hover:text-purple-600" />
               ))}
           </Button>
           {
@@ -114,9 +130,9 @@ export default function ChatHeader({
               variant="ghost"
               size="sm"
               onClick={() => handleSignOut()}
-              className="hidden lg:flex"
+              className="hidden lg:flex hover:text-purple-600 cursor-pointer"
             >
-              <LogOut className="w-4 h-4 mr-2" />
+              <LogOut className="w-4 h-4 mr-2 cursor-pointer" />
               Log Out
             </Button>
           }
@@ -150,9 +166,24 @@ export default function ChatHeader({
               <SelectValue placeholder="Select AI Model" />
             </SelectTrigger>
             <SelectContent className="bg-white dark:bg-gray-800 rounded-[4px]">
-              <SelectItem value="gpt-4">GPT-4</SelectItem>
-              <SelectItem value="gemini">Gemini</SelectItem>
-              <SelectItem value="llama">LLaMA</SelectItem>
+              <SelectItem
+                className="cursor-pointer hover:text-purple-600"
+                value="gpt-4"
+              >
+                GPT-4
+              </SelectItem>
+              <SelectItem
+                className="cursor-pointer hover:text-purple-600"
+                value="gemini"
+              >
+                Gemini
+              </SelectItem>
+              <SelectItem
+                className="cursor-pointer hover:text-purple-600"
+                value="llama"
+              >
+                LLaMA
+              </SelectItem>
             </SelectContent>
           </Select>
           <TokenUsage
@@ -160,9 +191,22 @@ export default function ChatHeader({
             isDisabled={isDisabled}
             tokenCount={token}
           />
+          <div
+            className="text-center cursor-pointer hover:text-purple-600"
+            onClick={() => {
+              router.push("/dashboard");
+            }}
+          >
+            Dashboard
+          </div>
           {connected && <TopupDialog />}
-          <Button variant="ghost" size="sm" onClick={() => handleSignOut()}>
-            <LogOut className="w-4 h-4 mr-2" />
+          <Button
+            variant="ghost"
+            className="hover:text-purple-600"
+            size="sm"
+            onClick={() => handleSignOut()}
+          >
+            <LogOut className="w-4 h-4 mr-2 cursor-pointer" />
             Log Out
           </Button>
         </nav>
