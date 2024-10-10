@@ -16,6 +16,8 @@ import { useWallet } from "@solana/wallet-adapter-react";
 import { signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import TokenUsage from "../TokenUsage";
+import { useAccount } from "wagmi";
+import { ConnectKitButton } from "connectkit";
 
 interface Props {
   handleTokenUsage: () => void;
@@ -31,6 +33,7 @@ export default function ChatHeader({
   const { theme, setTheme } = useTheme();
   const { connected } = useWallet();
   const router = useRouter();
+  const { address, isConnecting } = useAccount();
 
   const [model, setModel] = useState("gpt-4");
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -101,16 +104,18 @@ export default function ChatHeader({
               isDisabled={isDisabled}
               tokenCount={token}
             />
-            {connected && <TopupDialog />}
+            <ConnectKitButton />
+            {isConnecting || (address && <TopupDialog />)}
           </nav>
-          {connected && (
-            <div className="text-sm font-medium pl-0 lg:pl-[12px]">
-              Balance:{" "}
-              <span className="text-green-600 dark:text-green-400">
-                100 BODHI
-              </span>
-            </div>
-          )}
+          {isConnecting ||
+            (address && (
+              <div className="text-sm font-medium ml-[12px]">
+                Balance:{" "}
+                <span className="text-green-600 dark:text-green-400">
+                  100 BODHI
+                </span>
+              </div>
+            ))}
           <Button
             variant="ghost"
             size="icon"

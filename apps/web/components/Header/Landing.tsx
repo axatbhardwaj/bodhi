@@ -10,10 +10,13 @@ import { useWallet } from "@solana/wallet-adapter-react";
 import { signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { navitems } from "./navitems";
+import { useAccount } from "wagmi";
+import { ConnectKitButton } from "connectkit";
 
 export default function LandingHeader() {
   const { theme, setTheme } = useTheme();
   const { connected } = useWallet();
+  const { address, isConnecting } = useAccount();
   const router = useRouter();
   const session = useSession();
 
@@ -63,25 +66,28 @@ export default function LandingHeader() {
               <div>No items</div>
             )}
 
-            <WalletMultiButton
+            {/* <WalletMultiButton
               style={{
                 backgroundColor: "#9333ea",
                 height: "36px",
                 borderRadius: "4px",
               }}
               endIcon={<Wallet />}
-            />
+            /> */}
 
-            {connected && <TopupDialog />}
+            <ConnectKitButton />
+
+            {isConnecting || (address && <TopupDialog />)}
           </nav>
-          {connected && (
-            <div className="text-sm font-medium ml-[12px]">
-              Balance:{" "}
-              <span className="text-green-600 dark:text-green-400">
-                100 BODHI
-              </span>
-            </div>
-          )}
+          {isConnecting ||
+            (address && (
+              <div className="text-sm font-medium ml-[12px]">
+                Balance:{" "}
+                <span className="text-green-600 dark:text-green-400">
+                  100 BODHI
+                </span>
+              </div>
+            ))}
           <Button
             variant="ghost"
             size="icon"
