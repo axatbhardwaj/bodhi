@@ -28,8 +28,8 @@ contract BodhiToken is
         __Ownable_init(msg.sender);
     }
 
-    event tokensMinted(address indexed , uint256 _amount);
-    event tokensBurned(address indexed , uint256 _amount);
+    event tokensMinted(address indexed, uint256 _amount);
+    event tokensBurned(address indexed, uint256 _amount);
 
     function _update(
         address from,
