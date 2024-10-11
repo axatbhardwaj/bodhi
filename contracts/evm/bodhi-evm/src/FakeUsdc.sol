@@ -15,7 +15,7 @@ contract USDC is ERC20, Ownable {
         _burn(msg.sender, amount);
     }
 
-    function mint(address recipient, uint256 amount) external onlyOwner {
+    function mint(address recipient, uint256 amount) external {
         _mint(recipient, amount);
     }
 
