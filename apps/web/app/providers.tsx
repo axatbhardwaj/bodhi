@@ -16,7 +16,14 @@ export function Providers({ children }: { children: React.ReactNode }) {
       <SessionProvider>
         <WagmiProvider config={config}>
           <QueryClientProvider client={queryClient}>
-            <ConnectKitProvider>
+            <ConnectKitProvider
+             customTheme={{
+              "--ck-font-family": '"Comic Sans MS", "Comic Sans", cursive',
+              "--ck-border-radius": 42,
+              "--ck-accent-color": "#00D54B",
+    "--ck-accent-text-color": "#ffffff",
+            }}
+            >
               {/* <AppWalletProvider> */}
               <ThemeProvider attribute="class" defaultTheme="dark">
                 {children}
