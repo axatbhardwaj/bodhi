@@ -8,6 +8,7 @@ import "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 
 error invalidInputsProvided();
 error insufficientFunds(address);
+error insufficientAllowance();
 
 //interface for burn function in bodhi token
 interface IERC20Burn {
@@ -33,6 +34,26 @@ contract ServiceMarketPlace is OwnableUpgradeable, UUPSUpgradeable {
     }
     mapping(uint256 => service) public services;
 
+    // Events
+    event ServiceAdded(
+        uint256 serviceID,
+        address owner,
+        string serviceName,
+        uint256 inputTokenPrice,
+        uint256 outputTokenPrice
+    );
+    event TransactionProcessed(
+        uint256 serviceID,
+        address user,
+        uint256 inputTokenUsed,
+        uint256 outputTokenUsed,
+        uint256 totalCost
+    );
+    event BodhiTokenAddressSet(address bodhiTokenAddress);
+    event TokenDistributionContractAddressSet(
+        address tokenDistributionContractAddress
+    );
+
     function initialize(
         address _bodhiTokenAddress,
         address _tokenDistributionContractAddress
@@ -45,12 +66,16 @@ contract ServiceMarketPlace is OwnableUpgradeable, UUPSUpgradeable {
 
     function setBodyTokenAddress(address _bodhiToken) external onlyOwner {
         bodhiTokenAddress = _bodhiToken;
+        emit BodhiTokenAddressSet(_bodhiToken);
     }
 
     function setTokenDistributionContractAddress(
         address _tokenDistributionContractAddress
     ) external onlyOwner {
         tokenDistributionContractAddress = _tokenDistributionContractAddress;
+        emit TokenDistributionContractAddressSet(
+            _tokenDistributionContractAddress
+        );
     }
 
     function _authorizeUpgrade(
@@ -70,14 +95,13 @@ contract ServiceMarketPlace is OwnableUpgradeable, UUPSUpgradeable {
             _outputTokenPrice,
             serviceID
         );
-    }
-
-    // function to break signature into v, r, s for permit function
-    function signatureBreaker(
-        bytes memory _signature
-    ) internal pure returns (uint8 v, bytes32 r, bytes32 s) {
-        (v, r, s) = abi.decode(_signature, (uint8, bytes32, bytes32));
-        return (v, r, s);
+        emit ServiceAdded(
+            serviceID,
+            msg.sender,
+            _serviceName,
+            _inputTokenPrice,
+            _outputTokenPrice
+        );
     }
 
     function processTransaction(
@@ -96,9 +120,13 @@ contract ServiceMarketPlace is OwnableUpgradeable, UUPSUpgradeable {
             _inputTokenUsed +
             services[_serviceID].outputTokenPrice *
             _outputTokenUsed;
-
-        //check for token allowance via calling allowance function
-        IERC20(bodhiTokenAddress).allowance(msg.sender, address(this));
+        if (
+            //check for token allowance via calling allowance function
+            IERC20(bodhiTokenAddress).allowance(msg.sender, address(this)) <
+            totalCost
+        ) {
+            revert insufficientAllowance();
+        }
 
         // transfer tokens to this contract address
         IERC20(bodhiTokenAddress).transferFrom(
@@ -109,5 +137,13 @@ contract ServiceMarketPlace is OwnableUpgradeable, UUPSUpgradeable {
 
         // burn the recived tokens
         IERC20Burn(bodhiTokenAddress).burn(totalCost);
+
+        emit TransactionProcessed(
+            _serviceID,
+            msg.sender,
+            _inputTokenUsed,
+            _outputTokenUsed,
+            totalCost
+        );
     }
 }
