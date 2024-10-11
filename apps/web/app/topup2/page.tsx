@@ -13,6 +13,7 @@ import {
   TokenDistribution_Proxy_Address,
   BodhiToken_Proxy_Address,
 } from "@/utils/contractAddress";
+import toast from "react-hot-toast";
 
 export default function TopUp() {
   const [mintFUSDC, setMintFUSDC] = useState<number>();
@@ -51,7 +52,7 @@ export default function TopUp() {
 
   useEffect(() => {
     if (isApprovalSuccess && swapFUSDC) {
-      alert("Approval confirmed! Now initiating token purchase...");
+      toast.success("Approval confirmed! Now initiating token purchase...");
 
       writeContract(
         {
@@ -63,10 +64,12 @@ export default function TopUp() {
         {
           onSuccess: (hash) => {
             setTxHash(hash);
-            alert("Buy transaction submitted! Waiting for confirmation...");
+            toast.success(
+              "Buy transaction submitted! Waiting for confirmation...",
+            );
           },
           onError: (error) => {
-            alert(`Buy transaction failed: ${error.message}`);
+            toast.error(`Buy transaction failed: ${error.message}`);
             setIsProcessing(false);
           },
         },
@@ -78,7 +81,22 @@ export default function TopUp() {
     if (isBuySuccess) {
       refetchFUSDC();
       refetchBodhi();
-      alert("Token purchase confirmed successfully!");
+      toast.success(
+        <div>
+          Transaction confirmed successfully!{" "}
+          <a
+            href={`https://base-sepolia.blockscout.com/tx/${txHash}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="underline text-blue-600"
+          >
+            View on Explorer
+          </a>
+        </div>,
+        {
+          duration: 3000,
+        },
+      );
       setIsProcessing(false);
     }
   }, [isBuySuccess, refetchFUSDC, refetchBodhi]);
@@ -86,7 +104,7 @@ export default function TopUp() {
   const handleMintFUSDC = () => {
     try {
       setIsProcessing(true);
-      alert("Please confirm the transaction in your wallet");
+      toast("Please confirm the transaction in your wallet");
 
       writeContract(
         {
@@ -98,10 +116,10 @@ export default function TopUp() {
         {
           onSuccess: (hash) => {
             setTxHash(hash);
-            alert("Transaction submitted! Waiting for confirmation...");
+            toast.success("Transaction submitted! Waiting for confirmation...");
           },
           onError: (error) => {
-            alert(`Transaction failed: ${error.message}`);
+            toast.error(`Transaction failed: ${error.message}`);
             setIsProcessing(false);
           },
           onSettled: () => {
@@ -110,7 +128,7 @@ export default function TopUp() {
         },
       );
     } catch (err) {
-      alert(
+      toast.error(
         `Error: ${err instanceof Error ? err.message : "Transaction failed"}`,
       );
       setIsProcessing(false);
@@ -120,7 +138,7 @@ export default function TopUp() {
   const handleSwapFUSDC = () => {
     try {
       setIsProcessing(true);
-      alert("Please confirm the approval transaction in your wallet");
+      toast("Please confirm the approval transaction in your wallet");
 
       writeContract(
         {
@@ -132,18 +150,18 @@ export default function TopUp() {
         {
           onSuccess: (hash) => {
             setApprovalTxHash(hash);
-            alert(
+            toast.success(
               "Approval transaction submitted! Waiting for confirmation...",
             );
           },
           onError: (error) => {
-            alert(`Approval failed: ${error.message}`);
+            toast.error(`Approval failed: ${error.message}`);
             setIsProcessing(false);
           },
         },
       );
     } catch (err) {
-      alert(
+      toast.error(
         `Error: ${err instanceof Error ? err.message : "Transaction failed"}`,
       );
       setIsProcessing(false);
