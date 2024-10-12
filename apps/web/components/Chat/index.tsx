@@ -5,25 +5,114 @@
 import { geminiStore } from "@/actions/storePrompt";
 import axios from "axios";
 import { ArrowUp, Image, Paperclip, RefreshCw } from "lucide-react";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import PromptBox from "./PromtBox";
 import MessageBox from "./MessageBox";
 import { promptMessages, promptType } from "./prompt";
 import { tokenToBodhiCost } from "@/utils/calculateCost";
 import ChatHeader from "../Header/ChatHeader";
+import {
+  useAccount,
+  useReadContract,
+  useWaitForTransactionReceipt,
+  useWriteContract,
+} from "wagmi";
+import toast from "react-hot-toast";
+import { BodhiToken_ABI, ServiceMarketplace_ABI } from "@/utils/abi";
+import {
+  BodhiToken_Proxy_Address,
+  ServiceMarketplace_Proxy_Address,
+} from "@/utils/contractAddress";
 
 export default function Chat({ userId }: { userId: string }) {
   const [input, setInput] = useState("");
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [txHash, setTxHash] = useState<string>("");
+  const [approvalTxHash, setApprovalTxHash] = useState<string>("");
   const [messages, setMessages] = useState<
     { type: "prompt" | "response"; content: string }[]
   >([]);
   const [tokenCount, setTokenCount] = useState(0);
+  const [inputTokenCount, setInputTokenCount] = useState(0);
+  const [outputTokenCount, setOutputTokenCount] = useState(0);
+  const [generatedResponse, setGeneratedResponse] = useState<{
+    type: "response";
+    content: string;
+  }>();
 
+  const { writeContract } = useWriteContract();
   const submitButtonRef: any = useRef();
+  const { address } = useAccount();
 
   const scrollToBottomRef: any = useRef(null);
 
   const isEmpty = (value: string) => value.trim().length === 0;
+
+  const { isLoading: isApprovalConfirming, isSuccess: isApprovalSuccess } =
+    useWaitForTransactionReceipt({
+      hash: approvalTxHash as `0x${string}`,
+    });
+
+  const { isLoading: isTxConfirming, isSuccess: isTxSuccess } =
+    useWaitForTransactionReceipt({
+      hash: txHash as `0x${string}`,
+    });
+
+  const { data: balanceBodhi, refetch: refetchBodhi } = useReadContract({
+    abi: BodhiToken_ABI,
+    address: BodhiToken_Proxy_Address,
+    functionName: "balanceOf",
+    args: [address],
+  });
+
+  useEffect(() => {
+    if (isTxSuccess) {
+      refetchBodhi();
+      toast.success(
+        <div>
+          Transaction confirmed successfully!{" "}
+          <a
+            href={`https://base-sepolia.blockscout.com/tx/${txHash}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="underline text-blue-600"
+          >
+            View on Explorer
+          </a>
+        </div>,
+        {
+          duration: 3000,
+        },
+      );
+      setIsProcessing(false);
+      setMessages((prevMessages) => [...prevMessages, generatedResponse!]);
+    }
+  }, [isTxSuccess, refetchBodhi]);
+
+  useEffect(() => {
+    if (isApprovalSuccess) {
+      toast.success("Approval confirmed! Now initiating Bodhi transfer...");
+
+      writeContract(
+        {
+          abi: ServiceMarketplace_ABI,
+          address: ServiceMarketplace_Proxy_Address,
+          functionName: "processTransaction",
+          args: [1, inputTokenCount, outputTokenCount],
+        },
+        {
+          onSuccess: (hash) => {
+            setTxHash(hash);
+            toast.success("Transaction submitted! Waiting for confirmation...");
+          },
+          onError: (error) => {
+            toast.error(`Transaction failed: ${error.message}`);
+            setIsProcessing(false);
+          },
+        },
+      );
+    }
+  }, [isApprovalSuccess]);
 
   const handleChatSend = async () => {
     setInput("");
@@ -40,11 +129,13 @@ export default function Chat({ userId }: { userId: string }) {
         },
       },
     });
+    setInputTokenCount(res.data.response.usageMetadata.promptTokenCount);
+    setOutputTokenCount(res.data.response.usageMetadata.candidatesTokenCount);
 
-    setMessages((prevMessages) => [
-      ...prevMessages,
-      { type: "response", content: res.data.response.promptResult },
-    ]);
+    setGeneratedResponse({
+      type: "response",
+      content: res.data.response.promptResult,
+    });
 
     await geminiStore(
       input,
@@ -57,6 +148,38 @@ export default function Chat({ userId }: { userId: string }) {
       res.data.response.usageMetadata.promptTokenCount,
       res.data.response.usageMetadata.candidatesTokenCount,
     );
+
+    try {
+      setIsProcessing(true);
+      toast("Please confirm the approval transaction in your wallet");
+
+      writeContract(
+        {
+          abi: BodhiToken_ABI,
+          address: BodhiToken_Proxy_Address,
+          functionName: "approve",
+          args: [ServiceMarketplace_Proxy_Address, bodhiPayable],
+        },
+        {
+          onSuccess: (hash) => {
+            setApprovalTxHash(hash);
+            toast.success(
+              "Approval transaction submitted! Waiting for confirmation...",
+            );
+          },
+          onError: (error) => {
+            toast.error(`Approval failed: ${error.message}`);
+            setIsProcessing(false);
+          },
+        },
+      );
+    } catch (err) {
+      toast.error(
+        `Error: ${err instanceof Error ? err.message : "Transaction failed"}`,
+      );
+      setIsProcessing(false);
+    }
+
     scrollToBottomRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
@@ -84,6 +207,8 @@ export default function Chat({ userId }: { userId: string }) {
       }
     }
   };
+
+  const isLoading = isProcessing || isApprovalConfirming || isTxConfirming;
 
   return (
     <div>
@@ -170,11 +295,12 @@ export default function Chat({ userId }: { userId: string }) {
                     ref={submitButtonRef}
                     className="bg-gradient-to-br from-purple-600 to-pink-600 p-2 md:p-3 rounded-full"
                     onClick={handleChatSend}
-                    disabled={isEmpty(input)}
+                    disabled={isEmpty(input) || isLoading}
                   >
                     <ArrowUp />
                   </button>
                 </div>
+                <>CURRENT BALANCE: {Number(balanceBodhi)}</>
               </div>
 
               {false && (
