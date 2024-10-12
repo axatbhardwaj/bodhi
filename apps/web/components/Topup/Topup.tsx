@@ -66,7 +66,7 @@ export default function Topup() {
           abi: TokenDistribution_ABI,
           address: TokenDistribution_Proxy_Address,
           functionName: "buyTokens",
-          args: [swapFUSDC],
+          args: [swapFUSDC * 1e18],
         },
         {
           onSuccess: (hash) => {
@@ -118,7 +118,7 @@ export default function Topup() {
           abi: FUSDC_ABI,
           address: FUSDC_Address,
           functionName: "mint",
-          args: [address, mintFUSDC],
+          args: [address, mintFUSDC! * 1e18],
         },
         {
           onSuccess: (hash) => {
@@ -153,7 +153,7 @@ export default function Topup() {
           abi: FUSDC_ABI,
           address: FUSDC_Address,
           functionName: "approve",
-          args: [TokenDistribution_Proxy_Address, swapFUSDC],
+          args: [TokenDistribution_Proxy_Address, swapFUSDC! * 1e18],
         },
         {
           onSuccess: (hash) => {
@@ -232,7 +232,7 @@ export default function Topup() {
     !mintFUSDC ||
     mintFUSDC === 0 ||
     mintFUSDC < 0;
-    //for swap button
+  //for swap button
   const SwapButtonLoading =
     isProcessing ||
     isApprovalConfirming ||

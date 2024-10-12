@@ -27,7 +27,7 @@ export const Top = () => {
       <div className="flex items-center justify-center space-x-4 my-8">
         <div className="text-center">
           <p className="text-2xl font-bold">1 FUSDC</p>
-          <p className="text-sm text-gray-500 dark:text-gray-400">Solana</p>
+          <p className="text-sm text-gray-500 dark:text-gray-400">FUSDC</p>
         </div>
         <ArrowRightLeft className="w-6 h-6 text-purple-600 dark:text-purple-400" />
         <div className="text-center">
