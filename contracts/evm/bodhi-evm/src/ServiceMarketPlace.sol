@@ -103,6 +103,19 @@ contract ServiceMarketPlace is OwnableUpgradeable, UUPSUpgradeable {
         );
     }
 
+    function updateService(
+        uint256 _serviceID,
+        string memory _serviceName,
+        uint256 _inputTokenPrice,
+        uint256 _outputTokenPrice
+    ) external onlyOwner {
+        service memory updatedService = services[_serviceID];
+        updatedService.serviceName = _serviceName;
+        updatedService.inputTokenPrice = _inputTokenPrice;
+        updatedService.outputTokenPrice = _outputTokenPrice;
+        services[_serviceID] = updatedService;
+    }
+
     function processTransaction(
         uint256 _serviceID,
         uint256 _inputTokenUsed,
