@@ -5,7 +5,7 @@ import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
 contract USDC is ERC20, Ownable {
-    uint256 private _totalSupply = 20000;
+    uint256 private _totalSupply = 20000 * decimals();
 
     constructor() ERC20("FUSDC", "FUSD") Ownable(msg.sender) {
         _mint(msg.sender, _totalSupply);
