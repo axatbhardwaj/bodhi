@@ -85,7 +85,7 @@ contract ServiceMarketPlace is OwnableUpgradeable, UUPSUpgradeable {
         string memory _serviceName,
         uint256 _inputTokenPrice,
         uint256 _outputTokenPrice
-    ) external {
+    ) external onlyOwner {
         serviceID++;
         services[serviceID] = service(
             msg.sender,
