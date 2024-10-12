@@ -9,11 +9,11 @@ import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { navitems } from "./navitems";
+import { swapnavitems } from "./swapnav";
 import { useAccount } from "wagmi";
 import { ConnectKitButton } from "connectkit";
 
-export default function LandingHeader() {
+export default function SwapHeader({amount}:{amount:any}) {
   const { theme, setTheme } = useTheme();
   const { connected } = useWallet();
   const { address, isConnecting } = useAccount();
@@ -52,8 +52,8 @@ export default function LandingHeader() {
         </Link>
         <div className="flex items-center ml-auto">
           <nav className="hidden lg:flex items-center gap-4 sm:gap-6">
-            {navitems.length > 0 ? (
-              navitems.map((item: any) => (
+            {swapnavitems.length > 0 ? (
+              swapnavitems.map((item: any) => (
                 <Link
                   className="text-sm font-medium hover:text-purple-600 dark:hover:text-purple-400 transition-colors"
                   href={item.href}
@@ -65,7 +65,6 @@ export default function LandingHeader() {
             ) : (
               <div>No items</div>
             )}
-
             <ConnectKitButton />
 
             {isConnecting || (address && <TopupDialog />)}
@@ -75,7 +74,7 @@ export default function LandingHeader() {
               <div className="text-sm font-medium ml-[12px]">
                 Balance:{" "}
                 <span className="text-green-600 dark:text-green-400">
-                  100 BODHI
+                  {amount?.toString()} BODHI
                 </span>
               </div>
             ))}
@@ -137,8 +136,8 @@ export default function LandingHeader() {
       >
         <div className="h-[60px]"></div>
         <nav className="flex flex-col space-y-4 p-4">
-          {navitems.length > 0 ? (
-            navitems.map((item: any) => (
+          {swapnavitems.length > 0 ? (
+            swapnavitems.map((item: any) => (
               <Link
                 className="text-sm font-medium hover:text-purple-600 dark:hover:text-purple-400 transition-colors text-center p-2"
                 href={item.href}

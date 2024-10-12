@@ -4,7 +4,7 @@
 
 import { geminiStore } from "@/actions/storePrompt";
 import axios from "axios";
-import { ArrowUp, Image, Paperclip, RefreshCw, Zap, Coins } from "lucide-react";
+import { ArrowUp, Image, Paperclip, RefreshCw } from "lucide-react";
 import { useRef, useState } from "react";
 import PromptBox from "./PromtBox";
 import MessageBox from "./MessageBox";
