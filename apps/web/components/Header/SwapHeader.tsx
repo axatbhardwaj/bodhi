@@ -13,7 +13,8 @@ import { swapnavitems } from "./swapnav";
 import { useAccount } from "wagmi";
 import { ConnectKitButton } from "connectkit";
 
-export default function SwapHeader({amount}:{amount:any}) {
+//amount is any because type is unknown
+export default function SwapHeader({ amount }: { amount: any }) {
   const { theme, setTheme } = useTheme();
   const { connected } = useWallet();
   const { address, isConnecting } = useAccount();

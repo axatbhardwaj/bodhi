@@ -17,14 +17,14 @@ import {
   TokenDistribution_Proxy_Address,
   BodhiToken_Proxy_Address,
 } from "@/utils/contractAddress";
-import toast from "react-hot-toast"
+import toast from "react-hot-toast";
 import { Top } from "./Top";
 import { Bottom } from "./Bottom";
 
 export default function Topup() {
   const [mintFUSDC, setMintFUSDC] = useState<number>();
   const [swapFUSDC, setSwapFUSDC] = useState<number>();
-  const [bodhiAmount,setBodhiAmount] = useState(0);
+  const [bodhiAmount, setBodhiAmount] = useState(0);
   const [isProcessing, setIsProcessing] = useState(false);
   const [txHash, setTxHash] = useState<string>("");
   const [approvalTxHash, setApprovalTxHash] = useState<string>("");
@@ -142,6 +142,7 @@ export default function Topup() {
     }
   };
 
+  //function for swapping fusdc to bodhi
   const handleSwapFUSDC = () => {
     try {
       setIsProcessing(true);
@@ -176,7 +177,11 @@ export default function Topup() {
   };
 
   useEffect(() => {
-    if (swapFUSDC === null || swapFUSDC?.toString()===""||swapFUSDC===undefined) {
+    if (
+      swapFUSDC === null ||
+      swapFUSDC?.toString() === "" ||
+      swapFUSDC === undefined
+    ) {
       setBodhiAmount(0);
       setLoading(false);
     } else {
@@ -188,47 +193,63 @@ export default function Topup() {
           setBodhiAmount(bodhi);
         }
         setLoading(false);
-      }, 500); 
+      }, 500);
 
       return () => clearTimeout(timeout);
     }
   }, [swapFUSDC]);
 
-  const handleSetMintUsdc = (e:any) => {
+  const handleSetMintUsdc = (e: any) => {
+    // regex to avoid negative value
     if (/^\d*\.?\d*$/.test(e.target.value)) {
       setMintFUSDC(Number(e.target.value));
     }
-   else if (!e.target.value || !/^\d*\.?\d*$/.test(e.target.value)) {
+    // regex to avoid negative value
+    else if (!e.target.value || !/^\d*\.?\d*$/.test(e.target.value)) {
       setMintFUSDC(0);
       return;
     }
-  }
+  };
 
-  const handleSetSwapUsdc = (e:any) => {
+  const handleSetSwapUsdc = (e: any) => {
+    // regex to avoid negative value
     if (/^\d*\.?\d*$/.test(e.target.value)) {
       setSwapFUSDC(Number(e.target.value));
     }
-   else if (!e.target.value || !/^\d*\.?\d*$/.test(e.target.value)) {
+    // regex to avoid negative value
+    else if (!e.target.value || !/^\d*\.?\d*$/.test(e.target.value)) {
       setSwapFUSDC(0);
       return;
     }
-  }
+  };
 
   const isLoading = isProcessing || isApprovalConfirming || isBuyConfirming;
-  const mintButtonLoading = isProcessing || isApprovalConfirming || isBuyConfirming|| (!mintFUSDC) || (mintFUSDC===0 || mintFUSDC<0);
-  const SwapButtonLoading = isProcessing || isApprovalConfirming || isBuyConfirming|| (!swapFUSDC) || (swapFUSDC===0 || swapFUSDC<0);
-
+  //for mint button
+  const mintButtonLoading =
+    isProcessing ||
+    isApprovalConfirming ||
+    isBuyConfirming ||
+    !mintFUSDC ||
+    mintFUSDC === 0 ||
+    mintFUSDC < 0;
+    //for swap button
+  const SwapButtonLoading =
+    isProcessing ||
+    isApprovalConfirming ||
+    isBuyConfirming ||
+    !swapFUSDC ||
+    swapFUSDC === 0 ||
+    swapFUSDC < 0;
 
   return (
     <div className="min-h-screen flex flex-col">
-      <SwapHeader amount={balanceBodhi}/>
+      <SwapHeader amount={balanceBodhi} />
       <div className="flex flex-grow justify-center items-center">
         <div className="max-w-2xl mx-auto p-6 bg-white dark:bg-gray-900 rounded-[4px] shadow-md">
-          <Top/>
+          <Top />
           {/*Amount of Fake USDC you want to mint*/}
           <div className="space-y-4">
-
-          <div className="space-y-2">
+            <div className="space-y-2">
               <label htmlFor="fsudc-amount" className="text-sm font-medium">
                 Amount of FUSDC to mint
               </label>
@@ -238,13 +259,14 @@ export default function Topup() {
                 value={mintFUSDC}
                 min={0}
                 step={0.1}
-                 placeholder="Enter FUSDC amount"
-                onChange={(e)=>{handleSetMintUsdc(e)}}
+                placeholder="Enter FUSDC amount"
+                onChange={(e) => {
+                  handleSetMintUsdc(e);
+                }}
                 disabled={isLoading}
                 className="outline-none rounded-[4px]"
               />
             </div>
-
 
             <Button
               className="w-full rounded-[4px] bg-gradient-to-br from-purple-600 to-pink-600 text-white hover:text-purple-900 transition-all"
@@ -255,7 +277,7 @@ export default function Topup() {
               Mint FUSDC
             </Button>
 
-  {/*Amount of Fake USDC you want to swap*/}
+            {/*Amount of Fake USDC you want to swap*/}
             <div className="space-y-2">
               <label htmlFor="fsudc-amount" className="text-sm font-medium">
                 Amount of fusdc you want to swap
@@ -271,7 +293,7 @@ export default function Topup() {
                 className="outline-none rounded-[4px]"
               />
             </div>
-      
+
             {/* Receive Bodhi Tokens Amount */}
             <div className="space-y-2">
               <label htmlFor="bodhi-amount" className="text-sm font-medium">
@@ -302,7 +324,7 @@ export default function Topup() {
               Swap and Top Up
             </Button>
           </div>
-         <Bottom balanceBodhi={balanceBodhi} balanceFUSDC={balanceFUSDC} />
+          <Bottom balanceBodhi={balanceBodhi} balanceFUSDC={balanceFUSDC} />
         </div>
       </div>
     </div>
