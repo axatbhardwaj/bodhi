@@ -65,8 +65,6 @@ export default function DashboardHeader({ amount }: { amount: any }) {
               <div>No items</div>
             )}
 
-            <ConnectKitButton />
-
             {isConnecting || (address && <TopupDialog />)}
           </nav>
           {isConnecting ||
@@ -92,6 +90,7 @@ export default function DashboardHeader({ amount }: { amount: any }) {
                 <Moon className="h-5 w-5 hover:text-purple-600" />
               ))}
           </Button>
+          <ConnectKitButton />
           {session.status !== "loading" && (
             <Button
               className="hidden lg:flex hover:text-purple-600"

@@ -6,11 +6,11 @@ export interface promptType {
 export const promptMessages = [
   {
     id: 1,
-    text: "Can you explain how staking works on the Solana blockchain?",
+    text: "Can you explain how staking works on the Ethereum blockchain?",
   },
   {
     id: 2,
-    text: "How can I develop a dApp (decentralized application) on Solana using Rust?",
+    text: "How can I develop a dApp (decentralized application) on Ethereum using Solidity?",
   },
   {
     id: 3,

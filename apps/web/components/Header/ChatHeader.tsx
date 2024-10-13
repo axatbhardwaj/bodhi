@@ -34,7 +34,7 @@ export default function ChatHeader({
   const { theme, setTheme } = useTheme();
   const { address, isConnecting } = useAccount();
 
-  const [model, setModel] = useState("gpt-4");
+  const [model, setModel] = useState("gemini");
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const [mounted, setMounted] = useState(false);
@@ -85,21 +85,9 @@ export default function ChatHeader({
               <SelectContent className="bg-white dark:bg-gray-800 rounded-[4px]">
                 <SelectItem
                   className="cursor-pointer hover:text-purple-600"
-                  value="gpt-4"
-                >
-                  GPT-4
-                </SelectItem>
-                <SelectItem
-                  className="cursor-pointer hover:text-purple-600"
                   value="gemini"
                 >
                   Gemini
-                </SelectItem>
-                <SelectItem
-                  className="cursor-pointer hover:text-purple-600"
-                  value="llama"
-                >
-                  LLaMA
                 </SelectItem>
               </SelectContent>
             </Select>
@@ -108,7 +96,7 @@ export default function ChatHeader({
               isDisabled={isDisabled}
               tokenCount={token}
             />
-            <ConnectKitButton />
+
             {isConnecting || (address && <TopupDialog />)}
           </nav>
           {isConnecting ||
@@ -134,6 +122,7 @@ export default function ChatHeader({
                 <Moon className="h-5 w-5 hover:text-purple-600" />
               ))}
           </Button>
+          <ConnectKitButton />
           {
             <Button
               variant="ghost"
@@ -177,21 +166,9 @@ export default function ChatHeader({
             <SelectContent className="bg-white dark:bg-gray-800 rounded-[4px]">
               <SelectItem
                 className="cursor-pointer hover:text-purple-600"
-                value="gpt-4"
-              >
-                GPT-4
-              </SelectItem>
-              <SelectItem
-                className="cursor-pointer hover:text-purple-600"
                 value="gemini"
               >
                 Gemini
-              </SelectItem>
-              <SelectItem
-                className="cursor-pointer hover:text-purple-600"
-                value="llama"
-              >
-                LLaMA
               </SelectItem>
             </SelectContent>
           </Select>

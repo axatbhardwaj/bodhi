@@ -24,7 +24,13 @@ import {
   ServiceMarketplace_Proxy_Address,
 } from "@/utils/contractAddress";
 
-export default function Chat({ userId }: { userId: string }) {
+export default function Chat({
+  userId,
+  name,
+}: {
+  userId: string;
+  name: string | null | undefined;
+}) {
   const [input, setInput] = useState("");
   const [isProcessing, setIsProcessing] = useState(false);
   const [txHash, setTxHash] = useState<string>("");
@@ -224,8 +230,8 @@ export default function Chat({ userId }: { userId: string }) {
             {messages?.length === 0 && (
               <div className="space-y-8 mb-8 pb-40 px-6">
                 <h1 className="text-center font-bold text-4xl sm:text-5xl lg:text-6xl text-gray-600 dark:text-white">
-                  Hi there, <span className="text-[#a855f7]">John</span> <br />{" "}
-                  What{" "}
+                  Hi there, <span className="text-[#a855f7]">{name}</span>{" "}
+                  <br /> What{" "}
                   <span className="text-[#38bdf8]">would like to know</span>?
                 </h1>
 
