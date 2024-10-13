@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import React, { useState, useEffect } from "react";
-import { Brain,Sun, Moon, LogOut, LogIn, X, Menu } from "lucide-react";
+import { Brain, Sun, Moon, LogOut, LogIn, X, Menu } from "lucide-react";
 import { Button } from "@repo/ui/components/ui/button";
 import { useTheme } from "next-themes";
 import TopupDialog from "../Topup";
@@ -9,10 +9,10 @@ import { useWallet } from "@solana/wallet-adapter-react";
 import { signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { navitems } from "./navitems";
-import { useAccount} from "wagmi";
+import { useAccount } from "wagmi";
 import { ConnectKitButton } from "connectkit";
 
-export default function LandingHeader({amount}:{amount:any}) {
+export default function LandingHeader({ amount }: { amount: any }) {
   const { theme, setTheme } = useTheme();
   const { connected } = useWallet();
   const { address, isConnecting } = useAccount();
@@ -74,7 +74,7 @@ export default function LandingHeader({amount}:{amount:any}) {
               <div className="text-sm font-medium ml-[12px]">
                 Balance:{" "}
                 <span className="text-green-600 dark:text-green-400">
-                  {(Number(amount)/Number(1e18))?.toString()} BODHI
+                  {(Number(amount) / Number(1e18))?.toString()} BODHI
                 </span>
               </div>
             ))}
@@ -150,12 +150,11 @@ export default function LandingHeader({amount}:{amount:any}) {
             <div>No items</div>
           )}
           <div className="flex justify-center">
-           <ConnectKitButton />
+            <ConnectKitButton />
           </div>
           <div className="flex justify-center">
-{isConnecting || (address && <TopupDialog />)}
-        
-</div>
+            {isConnecting || (address && <TopupDialog />)}
+          </div>
           {connected && <TopupDialog />}
           {session.status !== "loading" && (
             <Button

@@ -22,14 +22,14 @@ interface Props {
   handleTokenUsage: () => void;
   isDisabled: boolean;
   token: number;
-  amount:any
+  amount: any;
 }
 
 export default function ChatHeader({
   handleTokenUsage,
   isDisabled,
   token,
-  amount
+  amount,
 }: Props) {
   const { theme, setTheme } = useTheme();
   const { address, isConnecting } = useAccount();
@@ -65,7 +65,7 @@ export default function ChatHeader({
         </Link>
         <div className="ml-auto flex items-center">
           <nav className="hidden xl:flex items-center space-x-4">
-          {chatnavitems.length > 0 ? (
+            {chatnavitems.length > 0 ? (
               chatnavitems.map((item: any) => (
                 <Link
                   className="text-sm font-medium hover:text-purple-600 dark:hover:text-purple-400 transition-colors"
@@ -116,7 +116,7 @@ export default function ChatHeader({
               <div className="text-sm font-medium ml-[12px]">
                 Balance:{" "}
                 <span className="text-green-600 dark:text-green-400">
-                  {((Number(amount)/Number(1e18))?.toString())||"0"} BODHI 
+                  {(Number(amount) / Number(1e18))?.toString() || "0"} BODHI
                 </span>
               </div>
             ))}
@@ -200,26 +200,25 @@ export default function ChatHeader({
             isDisabled={isDisabled}
             tokenCount={token}
           />
-           {chatnavitems.length > 0 ? (
-              chatnavitems.map((item: any) => (
-                <Link
-                  className="text-sm cursor-pointer text-center font-medium hover:text-purple-600 dark:hover:text-purple-400 transition-colors"
-                  href={item.href}
-                  key={item.id}
-                >
-                  {item.name}
-                </Link>
-              ))
-            ) : (
-              <div>No items</div>
-            )}
+          {chatnavitems.length > 0 ? (
+            chatnavitems.map((item: any) => (
+              <Link
+                className="text-sm cursor-pointer text-center font-medium hover:text-purple-600 dark:hover:text-purple-400 transition-colors"
+                href={item.href}
+                key={item.id}
+              >
+                {item.name}
+              </Link>
+            ))
+          ) : (
+            <div>No items</div>
+          )}
           <div className="flex justify-center">
-           <ConnectKitButton />
+            <ConnectKitButton />
           </div>
           <div className="flex justify-center">
-{isConnecting || (address && <TopupDialog />)}
-        
-</div>
+            {isConnecting || (address && <TopupDialog />)}
+          </div>
           <Button
             variant="ghost"
             className="hover:text-purple-600"

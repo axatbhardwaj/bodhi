@@ -21,7 +21,7 @@ import { tokenCountData } from "./tokenCountData";
 import { BodhiToken_ABI } from "@/utils/abi";
 import { BodhiToken_Proxy_Address } from "@/utils/contractAddress";
 import { useEffect, useState } from "react";
-import { useAccount,useReadContract  } from "wagmi";
+import { useAccount, useReadContract } from "wagmi";
 import DashboardHeader from "../Header/DashHeader";
 
 export const description = "A line chart with a label";
@@ -39,7 +39,7 @@ const chartConfig = {
 
 export function LineChartWithLabel() {
   const { theme } = useTheme();
-  const { address} = useAccount();
+  const { address } = useAccount();
   const transformedData = tokenCountData.map((data) => {
     const date = new Date(data.timestamp);
     const formattedDate = `${date.toLocaleDateString()} ${date.toLocaleTimeString()}`;
@@ -64,80 +64,82 @@ export function LineChartWithLabel() {
     args: [address],
   });
 
-  useEffect(()=>{
-    if(address){
-    refetchBodhi()
+  useEffect(() => {
+    if (address) {
+      refetchBodhi();
     }
-  },[address,refetchBodhi])
+  }, [address, refetchBodhi]);
 
   return (
-    <div className="w-full flex flex-col gap-12"> <DashboardHeader amount={balanceBodhi}/>
-         <main className="flex flex-col justify-center items-center">
-    <div className="w-3/4">
-      <Card>
-        <CardHeader>
-          <CardTitle>Line Chart - Label</CardTitle>
-          <CardDescription>Token Count Chart</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <ChartContainer config={chartConfig}>
-            <LineChart
-              accessibilityLayer
-              data={transformedData}
-              className="fill-black dark:fill-white"
-              margin={{
-                top: 20,
-                left: 12,
-                right: 12,
-              }}
-            >
-              <CartesianGrid vertical={false} />
-              <XAxis
-                className="fill-green-800 text-bold dark:fill-white"
-                dataKey="timestamp"
-                tickLine={false}
-                axisLine={false}
-                tickMargin={8}
-              />
-              <ChartTooltip
-                cursor={false}
-                content={<ChartTooltipContent indicator="line" />}
-              />
-              <Line
-                dataKey="totalToken"
-                type="natural"
-                stroke={theme === "dark" ? "#ffffff" : "#000000"} // Change line color based on theme
-                strokeWidth={2}
-                dot={{
-                  fill: "var(--color-desktop)",
-                }}
-                activeDot={{
-                  r: 6,
-                }}
-              >
-                <LabelList
-                  position="top"
-                  offset={12}
-                  className="fill-black dark:fill-white "
-                  fontSize={12}
-                />
-              </Line>
-            </LineChart>
-          </ChartContainer>
-        </CardContent>
-        <CardFooter className="flex-col items-start gap-2 text-sm">
-          <div className="flex gap-2 font-medium leading-none text-xs md:text-lg">
-          {currentAddress ? currentAddress : "Loading..."}
-          </div>
-          <div className="leading-none text-muted-foreground">
-            Showing Token Count for all the tokens that have been spent on
-            prompting by the user
-          </div>
-        </CardFooter>
-      </Card>
-    </div>
-    </main>
-    <Footer />
+    <div className="w-full flex flex-col gap-12">
+      {" "}
+      <DashboardHeader amount={balanceBodhi} />
+      <main className="flex flex-col justify-center items-center">
+        <div className="w-3/4">
+          <Card>
+            <CardHeader>
+              <CardTitle>Line Chart - Label</CardTitle>
+              <CardDescription>Token Count Chart</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <ChartContainer config={chartConfig}>
+                <LineChart
+                  accessibilityLayer
+                  data={transformedData}
+                  className="fill-black dark:fill-white"
+                  margin={{
+                    top: 20,
+                    left: 12,
+                    right: 12,
+                  }}
+                >
+                  <CartesianGrid vertical={false} />
+                  <XAxis
+                    className="fill-green-800 text-bold dark:fill-white"
+                    dataKey="timestamp"
+                    tickLine={false}
+                    axisLine={false}
+                    tickMargin={8}
+                  />
+                  <ChartTooltip
+                    cursor={false}
+                    content={<ChartTooltipContent indicator="line" />}
+                  />
+                  <Line
+                    dataKey="totalToken"
+                    type="natural"
+                    stroke={theme === "dark" ? "#ffffff" : "#000000"} // Change line color based on theme
+                    strokeWidth={2}
+                    dot={{
+                      fill: "var(--color-desktop)",
+                    }}
+                    activeDot={{
+                      r: 6,
+                    }}
+                  >
+                    <LabelList
+                      position="top"
+                      offset={12}
+                      className="fill-black dark:fill-white "
+                      fontSize={12}
+                    />
+                  </Line>
+                </LineChart>
+              </ChartContainer>
+            </CardContent>
+            <CardFooter className="flex-col items-start gap-2 text-sm">
+              <div className="flex gap-2 font-medium leading-none text-xs md:text-lg">
+                {currentAddress ? currentAddress : "Loading..."}
+              </div>
+              <div className="leading-none text-muted-foreground">
+                Showing Token Count for all the tokens that have been spent on
+                prompting by the user
+              </div>
+            </CardFooter>
+          </Card>
+        </div>
+      </main>
+      <Footer />
     </div>
   );
 }

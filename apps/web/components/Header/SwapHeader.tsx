@@ -75,7 +75,7 @@ export default function SwapHeader({ amount }: { amount: any }) {
               <div className="text-sm font-medium ml-[12px]">
                 Balance:{" "}
                 <span className="text-green-600 dark:text-green-400">
-                  {(Number(amount)/Number(1e18))?.toString()} BODHI
+                  {(Number(amount) / Number(1e18))?.toString()} BODHI
                 </span>
               </div>
             ))}
