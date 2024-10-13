@@ -12,27 +12,26 @@ import { Brain, Moon, Sun, LogOut, X, Menu } from "lucide-react";
 import Link from "next/link";
 import { useTheme } from "next-themes";
 import TopupDialog from "../Topup";
-import { useWallet } from "@solana/wallet-adapter-react";
 import { signOut } from "next-auth/react";
-import { useRouter } from "next/navigation";
 import TokenUsage from "../TokenUsage";
 import { useAccount } from "wagmi";
 import { ConnectKitButton } from "connectkit";
+import { chatnavitems } from "./chatnavitems";
 
 interface Props {
   handleTokenUsage: () => void;
   isDisabled: boolean;
   token: number;
+  amount:any
 }
 
 export default function ChatHeader({
   handleTokenUsage,
   isDisabled,
   token,
+  amount
 }: Props) {
   const { theme, setTheme } = useTheme();
-  const { connected } = useWallet();
-  const router = useRouter();
   const { address, isConnecting } = useAccount();
 
   const [model, setModel] = useState("gpt-4");
@@ -65,15 +64,20 @@ export default function ChatHeader({
           </span>
         </Link>
         <div className="ml-auto flex items-center">
-          <nav className="hidden lg:flex items-center space-x-4">
-            <div
-              className="cursor-pointer hover:text-purple-600"
-              onClick={() => {
-                router.push("/dashboard");
-              }}
-            >
-              Dashboard
-            </div>
+          <nav className="hidden xl:flex items-center space-x-4">
+          {chatnavitems.length > 0 ? (
+              chatnavitems.map((item: any) => (
+                <Link
+                  className="text-sm font-medium hover:text-purple-600 dark:hover:text-purple-400 transition-colors"
+                  href={item.href}
+                  key={item.id}
+                >
+                  {item.name}
+                </Link>
+              ))
+            ) : (
+              <div>No items</div>
+            )}
             <Select value={model} onValueChange={setModel}>
               <SelectTrigger className="w-[180px] h-[36px] rounded-[4px]">
                 <SelectValue placeholder="Select AI Model" />
@@ -112,7 +116,7 @@ export default function ChatHeader({
               <div className="text-sm font-medium ml-[12px]">
                 Balance:{" "}
                 <span className="text-green-600 dark:text-green-400">
-                  100 BODHI
+                  {((Number(amount)/Number(1e18))?.toString())||"0"} BODHI 
                 </span>
               </div>
             ))}
@@ -135,7 +139,7 @@ export default function ChatHeader({
               variant="ghost"
               size="sm"
               onClick={() => handleSignOut()}
-              className="hidden lg:flex hover:text-purple-600 cursor-pointer"
+              className="hidden sm:flex hover:text-purple-600 cursor-pointer"
             >
               <LogOut className="w-4 h-4 mr-2 cursor-pointer" />
               Log Out
@@ -144,7 +148,7 @@ export default function ChatHeader({
           <Button
             variant="ghost"
             size="icon"
-            className="lg:hidden hover:bg-purple-100 dark:hover:bg-purple-900 transition-colors duration-200"
+            className="xl:hidden hover:bg-purple-100 dark:hover:bg-purple-900 transition-colors duration-200"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             aria-label="Toggle menu"
           >
@@ -196,15 +200,26 @@ export default function ChatHeader({
             isDisabled={isDisabled}
             tokenCount={token}
           />
-          <div
-            className="text-center cursor-pointer hover:text-purple-600"
-            onClick={() => {
-              router.push("/dashboard");
-            }}
-          >
-            Dashboard
+           {chatnavitems.length > 0 ? (
+              chatnavitems.map((item: any) => (
+                <Link
+                  className="text-sm cursor-pointer text-center font-medium hover:text-purple-600 dark:hover:text-purple-400 transition-colors"
+                  href={item.href}
+                  key={item.id}
+                >
+                  {item.name}
+                </Link>
+              ))
+            ) : (
+              <div>No items</div>
+            )}
+          <div className="flex justify-center">
+           <ConnectKitButton />
           </div>
-          {connected && <TopupDialog />}
+          <div className="flex justify-center">
+{isConnecting || (address && <TopupDialog />)}
+        
+</div>
           <Button
             variant="ghost"
             className="hover:text-purple-600"

@@ -1,9 +1,6 @@
 "use client";
-import React, { FC, useState, Suspense } from "react";
-import { MDXRemote } from "next-mdx-remote/rsc";
-import { TextGenerateEffect } from "@repo/ui/components/ui/text-generate-effect";
-import { Bot, Check, CheckCircle, Copy } from "lucide-react";
-import { Button } from "@repo/ui/components/ui/button";
+import React, { FC, useState} from "react";
+import { Bot, Check, Copy } from "lucide-react";
 import Markdown from "./Markdown";
 
 interface Props {

@@ -1,20 +1,18 @@
 "use client";
 import Link from "next/link";
 import React, { useState, useEffect } from "react";
-import { Brain, Wallet, Sun, Moon, LogOut, LogIn, X, Menu } from "lucide-react";
+import { Brain,Sun, Moon, LogOut, LogIn, X, Menu } from "lucide-react";
 import { Button } from "@repo/ui/components/ui/button";
 import { useTheme } from "next-themes";
 import TopupDialog from "../Topup";
-import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { swapnavitems } from "./swapnav";
-import { useAccount } from "wagmi";
+import { useAccount} from "wagmi";
 import { ConnectKitButton } from "connectkit";
+import { swapnavitems } from "./swapnav";
 
-//amount is any because type is unknown
-export default function SwapHeader({ amount }: { amount: any }) {
+export default function DashboardHeader({amount}:{amount:any}) {
   const { theme, setTheme } = useTheme();
   const { connected } = useWallet();
   const { address, isConnecting } = useAccount();
@@ -66,6 +64,7 @@ export default function SwapHeader({ amount }: { amount: any }) {
             ) : (
               <div>No items</div>
             )}
+
             <ConnectKitButton />
 
             {isConnecting || (address && <TopupDialog />)}
@@ -150,19 +149,13 @@ export default function SwapHeader({ amount }: { amount: any }) {
           ) : (
             <div>No items</div>
           )}
-          {!connected && (
-            <WalletMultiButton
-              style={{
-                backgroundColor: "#9333ea",
-                height: "36px",
-                borderRadius: "4px",
-                width: "100%",
-                justifyContent: "center",
-              }}
-              endIcon={<Wallet />}
-            />
-          )}
-
+          <div className="flex justify-center">
+           <ConnectKitButton />
+          </div>
+          <div className="flex justify-center">
+{isConnecting || (address && <TopupDialog />)}
+        
+</div>
           {connected && <TopupDialog />}
           {session.status !== "loading" && (
             <Button

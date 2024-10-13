@@ -1,19 +1,18 @@
 "use client";
 import Link from "next/link";
 import React, { useState, useEffect } from "react";
-import { Brain, Wallet, Sun, Moon, LogOut, LogIn, X, Menu } from "lucide-react";
+import { Brain,Sun, Moon, LogOut, LogIn, X, Menu } from "lucide-react";
 import { Button } from "@repo/ui/components/ui/button";
 import { useTheme } from "next-themes";
 import TopupDialog from "../Topup";
-import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { navitems } from "./navitems";
-import { useAccount } from "wagmi";
+import { useAccount} from "wagmi";
 import { ConnectKitButton } from "connectkit";
 
-export default function LandingHeader() {
+export default function LandingHeader({amount}:{amount:any}) {
   const { theme, setTheme } = useTheme();
   const { connected } = useWallet();
   const { address, isConnecting } = useAccount();
@@ -51,7 +50,7 @@ export default function LandingHeader() {
           </span>
         </Link>
         <div className="flex items-center ml-auto">
-          <nav className="hidden lg:flex items-center gap-4 sm:gap-6">
+          <nav className="hidden xl:flex items-center gap-4 sm:gap-6">
             {navitems.length > 0 ? (
               navitems.map((item: any) => (
                 <Link
@@ -75,7 +74,7 @@ export default function LandingHeader() {
               <div className="text-sm font-medium ml-[12px]">
                 Balance:{" "}
                 <span className="text-green-600 dark:text-green-400">
-                  100 BODHI
+                  {(Number(amount)/Number(1e18))?.toString()} BODHI
                 </span>
               </div>
             ))}
@@ -115,7 +114,7 @@ export default function LandingHeader() {
           <Button
             variant="ghost"
             size="icon"
-            className="lg:hidden hover:bg-purple-100 dark:hover:bg-purple-900 transition-colors duration-200"
+            className="xl:hidden hover:bg-purple-100 dark:hover:bg-purple-900 transition-colors duration-200"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             aria-label="Toggle menu"
           >
@@ -150,19 +149,13 @@ export default function LandingHeader() {
           ) : (
             <div>No items</div>
           )}
-          {!connected && (
-            <WalletMultiButton
-              style={{
-                backgroundColor: "#9333ea",
-                height: "36px",
-                borderRadius: "4px",
-                width: "100%",
-                justifyContent: "center",
-              }}
-              endIcon={<Wallet />}
-            />
-          )}
-
+          <div className="flex justify-center">
+           <ConnectKitButton />
+          </div>
+          <div className="flex justify-center">
+{isConnecting || (address && <TopupDialog />)}
+        
+</div>
           {connected && <TopupDialog />}
           {session.status !== "loading" && (
             <Button

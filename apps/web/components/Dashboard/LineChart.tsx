@@ -16,8 +16,13 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
-import { useWallet } from "@solana/wallet-adapter-react";
+import Footer from "@/components/Footer";
 import { tokenCountData } from "./tokenCountData";
+import { BodhiToken_ABI } from "@/utils/abi";
+import { BodhiToken_Proxy_Address } from "@/utils/contractAddress";
+import { useEffect, useState } from "react";
+import { useAccount,useReadContract  } from "wagmi";
+import DashboardHeader from "../Header/DashHeader";
 
 export const description = "A line chart with a label";
 
@@ -33,9 +38,8 @@ const chartConfig = {
 } satisfies ChartConfig;
 
 export function LineChartWithLabel() {
-  const { publicKey } = useWallet();
   const { theme } = useTheme();
-
+  const { address} = useAccount();
   const transformedData = tokenCountData.map((data) => {
     const date = new Date(data.timestamp);
     const formattedDate = `${date.toLocaleDateString()} ${date.toLocaleTimeString()}`;
@@ -45,8 +49,30 @@ export function LineChartWithLabel() {
       totalToken: data.inputToken + data.outputToken,
     };
   });
+  const [currentAddress, setCurrentAddress] = useState("");
+
+  useEffect(() => {
+    if (address) {
+      setCurrentAddress(address);
+    }
+  }, [address]);
+
+  const { data: balanceBodhi, refetch: refetchBodhi } = useReadContract({
+    abi: BodhiToken_ABI,
+    address: BodhiToken_Proxy_Address,
+    functionName: "balanceOf",
+    args: [address],
+  });
+
+  useEffect(()=>{
+    if(address){
+    refetchBodhi()
+    }
+  },[address,refetchBodhi])
 
   return (
+    <div className="w-full flex flex-col gap-12"> <DashboardHeader amount={balanceBodhi}/>
+         <main className="flex flex-col justify-center items-center">
     <div className="w-3/4">
       <Card>
         <CardHeader>
@@ -101,7 +127,7 @@ export function LineChartWithLabel() {
         </CardContent>
         <CardFooter className="flex-col items-start gap-2 text-sm">
           <div className="flex gap-2 font-medium leading-none text-xs md:text-lg">
-            {publicKey?.toString()}
+          {currentAddress ? currentAddress : "Loading..."}
           </div>
           <div className="leading-none text-muted-foreground">
             Showing Token Count for all the tokens that have been spent on
@@ -109,6 +135,9 @@ export function LineChartWithLabel() {
           </div>
         </CardFooter>
       </Card>
+    </div>
+    </main>
+    <Footer />
     </div>
   );
 }

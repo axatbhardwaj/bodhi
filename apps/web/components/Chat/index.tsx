@@ -216,6 +216,7 @@ export default function Chat({ userId }: { userId: string }) {
         handleTokenUsage={handleTokenCount}
         isDisabled={isEmpty(input)}
         token={tokenCount}
+        amount={balanceBodhi}
       />
       <main className="flex-1">
         <div className="w-full min-h-screen flex flex-col text-white overflow-hidden">
@@ -300,7 +301,7 @@ export default function Chat({ userId }: { userId: string }) {
                     <ArrowUp />
                   </button>
                 </div>
-                <>CURRENT BALANCE: {Number(balanceBodhi)}</>
+                {/* <div className="dark:text-white text-black">CURRENT BALANCE: {Number(balanceBodhi)/Number(1e18)}</div> */}
               </div>
 
               {false && (
