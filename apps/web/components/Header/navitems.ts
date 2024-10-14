@@ -1,12 +1,17 @@
 export const navitems = [
   {
-    id: 2,
+    id: 1,
     href: "/dashboard",
     name: "Dashboard",
   },
   {
-    id: 1,
+    id: 2,
     href: "/chat",
     name: "Chat",
+  },
+  {
+    id: 3,
+    href: "/pricing",
+    name: "Pricing",
   },
 ];

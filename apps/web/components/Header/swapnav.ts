@@ -9,9 +9,4 @@ export const swapnavitems = [
     href: "/chat",
     name: "Chat",
   },
-  {
-    id: 3,
-    href: "/dashboard",
-    name: "Dashboard",
-  },
 ];

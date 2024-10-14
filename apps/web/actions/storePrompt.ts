@@ -9,33 +9,37 @@ export async function geminiStore(
   outputToken: number,
   userId: string,
 ) {
-  await prisma.user.update({
-    where: {
-      id: userId,
-    },
-    data: {
-      promptHistory: {
-        create: [
-          {
-            textContent: prompt,
-          },
-        ],
+  try {
+    await prisma.user.update({
+      where: {
+        id: userId,
       },
-      responseHistory: {
-        create: [
-          {
-            textContent: response,
-          },
-        ],
+      data: {
+        promptHistory: {
+          create: [
+            {
+              textContent: prompt,
+            },
+          ],
+        },
+        responseHistory: {
+          create: [
+            {
+              textContent: response,
+            },
+          ],
+        },
+        tokenCount: {
+          create: [
+            {
+              inputToken,
+              outputToken,
+            },
+          ],
+        },
       },
-      tokenCount: {
-        create: [
-          {
-            inputToken,
-            outputToken,
-          },
-        ],
-      },
-    },
-  });
+    });
+  } catch (e) {
+    console.log("Error: ", e);
+  }
 }
