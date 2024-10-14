@@ -14,7 +14,7 @@ import {
   CardTitle,
 } from "@repo/ui/components/ui/card";
 
-import { Info, Check } from "lucide-react";
+import { Info, Check, Zap, Shield, Cpu } from "lucide-react";
 
 export default function PricingComponent() {
   const [isAnnual, setIsAnnual] = useState(false);
@@ -32,6 +32,8 @@ export default function PricingComponent() {
         "Context Caching: $0.01875 / 1M tokens",
         "Basic support",
       ],
+      icon: <Zap className="h-12 w-12 text-purple-600" />,
+      color: "purple",
     },
     pro: {
       name: "Pro",
@@ -45,6 +47,8 @@ export default function PricingComponent() {
         "Priority support",
         "Advanced analytics",
       ],
+      icon: <Shield className="h-12 w-12 text-blue-600" />,
+      color: "blue",
     },
   };
 
@@ -74,36 +78,48 @@ export default function PricingComponent() {
             </p>
           </div>
           <div className="grid md:grid-cols-2 gap-8">
-            {Object.entries(pricingData).map(([key, plan], index) => (
+            {Object.entries(pricingData).map(([key, plan]) => (
               <Card
                 key={key}
-                className="flex flex-col rounded-[4px] overflow-hidden"
+                className={`flex flex-col rounded-[4px] overflow-hidden transition-all duration-300 hover:shadow-xl hover:scale-105 bg-white dark:bg-gray-800 border-${plan.color}-200 dark:border-${plan.color}-800`}
               >
                 <div
-                  className={`h-[10px] ${index === 0 ? "bg-primary-700" : "bg-blue-700"}`}
-                ></div>
-                <CardHeader>
-                  <CardTitle>{plan.name}</CardTitle>
-                  <CardDescription>{plan.description}</CardDescription>
-                </CardHeader>
-                <CardContent className="flex-grow">
-                  <div className="text-4xl font-bold mb-4">
-                    ${plan.price}
-                    <span className="text-lg font-normal">
-                      /{isAnnual ? "year" : "month"}
-                    </span>
-                  </div>
-                  <ul className="space-y-2">
+                  className={`bg-gradient-to-r from-${plan.color}-600 to-${plan.color}-400 py-6 text-white`}
+                >
+                  <CardHeader>
+                    <div className="flex items-center justify-between">
+                      <CardTitle className="text-3xl font-bold">
+                        {plan.name}
+                      </CardTitle>
+                      {plan.icon}
+                    </div>
+                    <CardDescription className={`text-${plan.color}-100 mb-4`}>
+                      {plan.description}
+                    </CardDescription>
+                    {/* <div className="text-5xl font-bold mt-8">
+                      ${plan.price}
+                      <span className="text-xl font-normal">
+                        /{isAnnual ? "year" : "month"}
+                      </span>
+                    </div> */}
+                  </CardHeader>
+                </div>
+                <CardContent className="flex-grow p-6">
+                  <ul className="space-y-3">
                     {plan.features.map((feature, index) => (
                       <li key={index} className="flex items-center">
-                        <Check className="h-5 w-5 text-green-500 mr-2" />
-                        {feature}
+                        <Check
+                          className={`h-5 w-5 text-${plan.color}-500 mr-2 flex-shrink-0`}
+                        />
+                        <span>{feature}</span>
                       </li>
                     ))}
                   </ul>
                 </CardContent>
-                <CardFooter>
-                  <Button className="rounded-[4px] bg-gradient-to-br from-purple-600 to-pink-600 text-white hover:text-purple-900 transition-all px-[1rem] lg:px-[2rem] w-full">
+                <CardFooter className="p-6">
+                  <Button
+                    className={`w-full rounded-[4px] bg-gradient-to-br from-purple-600 to-pink-600 text-white hover:text-purple-900 transition-all px-[1rem] lg:px-[2rem]`}
+                  >
                     Choose {plan.name}
                   </Button>
                 </CardFooter>
