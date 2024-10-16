@@ -30,9 +30,7 @@ export const authOptions: NextAuthOptions = {
       return session;
     },
     async redirect() {
-      return process.env.NODE_ENV === "development"
-        ? "http://localhost:3000/chat"
-        : "http://bodhi.crabdance.com/chat";
+      return process.env.NEXT_PUBLIC_AUTH_REDIRECT_URL!;
     },
   },
 };
