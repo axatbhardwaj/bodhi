@@ -8,7 +8,6 @@ import TopupDialog from "../Topup";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { navitems } from "./navitems";
 import { useAccount } from "wagmi";
 import { ConnectKitButton } from "connectkit";
 import { pricingitems } from "./pricingitems";
@@ -138,8 +137,8 @@ export default function PricingHeader({ amount }: { amount: any }) {
       >
         <div className="h-[60px]"></div>
         <nav className="flex flex-col space-y-4 p-4">
-          {navitems.length > 0 ? (
-            navitems.map((item: any) => (
+          {pricingitems.length > 0 ? (
+            pricingitems.map((item: any) => (
               <Link
                 className="text-sm font-medium hover:text-purple-600 dark:hover:text-purple-400 transition-colors text-center p-2"
                 href={item.href}
