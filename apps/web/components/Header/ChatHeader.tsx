@@ -122,7 +122,9 @@ export default function ChatHeader({
                 <Moon className="h-5 w-5 hover:text-purple-600" />
               ))}
           </Button>
+          <div className="hidden sm:flex">
           <ConnectKitButton />
+          </div>
           {
             <Button
               variant="ghost"
@@ -151,7 +153,7 @@ export default function ChatHeader({
       </header>
       {/* Mobile menu */}
       <div
-        className={`lg:hidden fixed inset-0 z-40 bg-white/95 dark:bg-gray-800/95 backdrop-blur-md transition-all duration-300 ease-in-out ${
+        className={`xl:hidden fixed inset-0 z-40 bg-white/95 dark:bg-gray-800/95 backdrop-blur-md transition-all duration-300 ease-in-out ${
           mobileMenuOpen
             ? "opacity-100 translate-x-100"
             : "opacity-0 translate-x-full"

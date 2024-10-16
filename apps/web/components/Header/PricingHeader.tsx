@@ -11,8 +11,9 @@ import { useRouter } from "next/navigation";
 import { navitems } from "./navitems";
 import { useAccount } from "wagmi";
 import { ConnectKitButton } from "connectkit";
+import { pricingitems } from "./pricingitems";
 
-export default function LandingHeader({ amount }: { amount: any }) {
+export default function PricingHeader({ amount }: { amount: any }) {
   const { theme, setTheme } = useTheme();
   const { connected } = useWallet();
   const { address, isConnecting } = useAccount();
@@ -51,8 +52,8 @@ export default function LandingHeader({ amount }: { amount: any }) {
         </Link>
         <div className="flex items-center ml-auto">
           <nav className="hidden xl:flex items-center gap-4 sm:gap-6">
-            {navitems.length > 0 ? (
-              navitems.map((item: any) => (
+            {pricingitems.length > 0 ? (
+              pricingitems.map((item: any) => (
                 <Link
                   className="text-sm font-medium hover:text-purple-600 dark:hover:text-purple-400 transition-colors"
                   href={item.href}

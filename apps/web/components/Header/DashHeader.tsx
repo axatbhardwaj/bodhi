@@ -5,16 +5,15 @@ import { Brain, Sun, Moon, LogOut, LogIn, X, Menu } from "lucide-react";
 import { Button } from "@repo/ui/components/ui/button";
 import { useTheme } from "next-themes";
 import TopupDialog from "../Topup";
-import { useWallet } from "@solana/wallet-adapter-react";
 import { signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useAccount } from "wagmi";
 import { ConnectKitButton } from "connectkit";
 import { swapnavitems } from "./swapnav";
+import { dashnavitems } from "./dashnavitems";
 
 export default function DashboardHeader({ amount }: { amount: any }) {
   const { theme, setTheme } = useTheme();
-  const { connected } = useWallet();
   const { address, isConnecting } = useAccount();
   const router = useRouter();
   const session = useSession();
@@ -51,8 +50,8 @@ export default function DashboardHeader({ amount }: { amount: any }) {
         </Link>
         <div className="flex items-center ml-auto">
           <nav className="hidden lg:flex items-center gap-4 sm:gap-6">
-            {swapnavitems.length > 0 ? (
-              swapnavitems.map((item: any) => (
+            {dashnavitems.length > 0 ? (
+              dashnavitems.map((item: any) => (
                 <Link
                   className="text-sm font-medium hover:text-purple-600 dark:hover:text-purple-400 transition-colors"
                   href={item.href}
@@ -90,7 +89,9 @@ export default function DashboardHeader({ amount }: { amount: any }) {
                 <Moon className="h-5 w-5 hover:text-purple-600" />
               ))}
           </Button>
+          <div className="hidden sm:flex">
           <ConnectKitButton />
+          </div>
           {session.status !== "loading" && (
             <Button
               className="hidden lg:flex hover:text-purple-600"
@@ -153,8 +154,7 @@ export default function DashboardHeader({ amount }: { amount: any }) {
           </div>
           <div className="flex justify-center">
             {isConnecting || (address && <TopupDialog />)}
-          </div>
-          {connected && <TopupDialog />}
+          </div>           
           {session.status !== "loading" && (
             <Button
               variant="ghost"
