@@ -127,9 +127,9 @@ export default function LandingHeader({ amount }: { amount: any }) {
       </header>
       {/* Mobile Menu */}
       <div
-        className={`lg:hidden fixed top-0 left-0 bg-white/95 dark:bg-gray-800/95 backdrop-blur-md z-40 inset-0 duration-300 ease-in-out ${
+        className={`xl:hidden fixed top-0 left-0 bg-white/95 dark:bg-gray-800/95 backdrop-blur-md z-40 inset-0 duration-300 ease-in-out ${
           mobileMenuOpen
-            ? "opacity-100 translat-x-100"
+            ? "opacity-100 translate-x-100"
             : "opacity-0 translate-x-full"
         }`}
       >
