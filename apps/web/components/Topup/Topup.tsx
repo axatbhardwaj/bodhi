@@ -19,7 +19,6 @@ import {
 } from "@/utils/contractAddress";
 import toast from "react-hot-toast";
 import { Top } from "./Top";
-import { Bottom } from "./Bottom";
 
 export default function Topup() {
   const [mintFUSDC, setMintFUSDC] = useState<number>();
@@ -242,11 +241,11 @@ export default function Topup() {
     swapFUSDC < 0;
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col ">
       <SwapHeader amount={balanceBodhi} />
       <div className="flex flex-grow justify-center items-center">
-        <div className="max-w-2xl mx-auto p-6 bg-white dark:bg-gray-900 rounded-[4px] shadow-md">
-          <Top />
+        <div className="max-w-2xl mx-auto p-6 bg-white dark:bg-gray-900 rounded-[4px] shadow-lg">
+          <Top balanceBodhi={balanceBodhi} balanceFUSDC={balanceFUSDC} />
           {/*Amount of Fake USDC you want to mint*/}
           <div className="space-y-4">
             <div className="space-y-2">
@@ -324,7 +323,6 @@ export default function Topup() {
               Swap and Top Up
             </Button>
           </div>
-          <Bottom balanceBodhi={balanceBodhi} balanceFUSDC={balanceFUSDC} />
         </div>
       </div>
     </div>
