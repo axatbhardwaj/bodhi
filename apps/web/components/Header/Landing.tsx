@@ -4,8 +4,6 @@ import React, { useState, useEffect } from "react";
 import { Brain, Sun, Moon, LogOut, LogIn, X, Menu } from "lucide-react";
 import { Button } from "@repo/ui/components/ui/button";
 import { useTheme } from "next-themes";
-import TopupDialog from "../Topup";
-import { useWallet } from "@solana/wallet-adapter-react";
 import { signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { navitems } from "./navitems";
@@ -14,7 +12,6 @@ import { ConnectKitButton } from "connectkit";
 
 export default function LandingHeader({ amount }: { amount: any }) {
   const { theme, setTheme } = useTheme();
-  const { connected } = useWallet();
   const { address, isConnecting } = useAccount();
   const router = useRouter();
   const session = useSession();
@@ -52,20 +49,35 @@ export default function LandingHeader({ amount }: { amount: any }) {
         <div className="flex items-center ml-auto">
           <nav className="hidden xl:flex items-center gap-4 sm:gap-6">
             {navitems.length > 0 ? (
-              navitems.map((item: any) => (
-                <Link
-                  className="text-sm font-medium hover:text-purple-600 dark:hover:text-purple-400 transition-colors"
-                  href={item.href}
-                  key={item.id}
-                >
-                  {item.name}
-                </Link>
-              ))
+              navitems.map((item: any) => {
+                const isTopup = item.name.toLowerCase() === "topup";
+
+                if (isTopup && address) {
+                  return (
+                    <Link
+                      className="text-sm font-medium hover:text-purple-600 dark:hover:text-purple-400 transition-colors"
+                      href={item.href}
+                      key={item.id}
+                    >
+                      {item.name}
+                    </Link>
+                  );
+                }
+                if (!isTopup) {
+                  return (
+                    <Link
+                      className="text-sm font-medium hover:text-purple-600 dark:hover:text-purple-400 transition-colors"
+                      href={item.href}
+                      key={item.id}
+                    >
+                      {item.name}
+                    </Link>
+                  );
+                }
+              })
             ) : (
               <div>No items</div>
             )}
-
-            {isConnecting || (address && <TopupDialog />)}
           </nav>
           {isConnecting ||
             (address && (
@@ -91,7 +103,7 @@ export default function LandingHeader({ amount }: { amount: any }) {
               ))}
           </Button>
           <div className="hidden sm:flex">
-          <ConnectKitButton />
+            <ConnectKitButton />
           </div>
           {session.status !== "loading" && (
             <Button
@@ -138,25 +150,39 @@ export default function LandingHeader({ amount }: { amount: any }) {
         <div className="h-[60px]"></div>
         <nav className="flex flex-col space-y-4 p-4">
           {navitems.length > 0 ? (
-            navitems.map((item: any) => (
-              <Link
-                className="text-sm font-medium hover:text-purple-600 dark:hover:text-purple-400 transition-colors text-center p-2"
-                href={item.href}
-                key={item.id}
-              >
-                {item.name}
-              </Link>
-            ))
+            navitems.map((item: any) => {
+              const isTopup = item.name.toLowerCase() === "topup";
+
+              if (isTopup && address) {
+                return (
+                  <Link
+                    className="text-sm font-medium hover:text-purple-600 dark:hover:text-purple-400 transition-colors text-center p-2"
+                    href={item.href}
+                    key={item.id}
+                  >
+                    {item.name}
+                  </Link>
+                );
+              }
+              if (!isTopup) {
+                return (
+                  <Link
+                    className="text-sm font-medium hover:text-purple-600 dark:hover:text-purple-400 transition-colors text-center p-2"
+                    href={item.href}
+                    key={item.id}
+                  >
+                    {item.name}
+                  </Link>
+                );
+              }
+            })
           ) : (
             <div>No items</div>
           )}
           <div className="flex justify-center">
             <ConnectKitButton />
           </div>
-          <div className="flex justify-center">
-            {isConnecting || (address && <TopupDialog />)}
-          </div>
-          {connected && <TopupDialog />}
+
           {session.status !== "loading" && (
             <Button
               variant="ghost"
