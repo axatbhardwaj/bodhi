@@ -3,17 +3,21 @@ import React, { useEffect, useState } from "react";
 import { BodhiToken_ABI } from "@/utils/abi";
 import { BodhiToken_Proxy_Address } from "@/utils/contractAddress";
 import { useAccount, useReadContract } from "wagmi";
-import { Button } from "@repo/ui/components/ui/button";
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@repo/ui/components/ui/tabs";
 import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@repo/ui/components/ui/card";
-import {  Pricings, pricingData } from "./pricingData";
-import { Check } from "lucide-react";
+import { pricingData } from "./pricingData";
+import { Zap, Shield } from "lucide-react";
 import { Footer } from "./Footer";
 import PricingHeader from "../Header/PricingHeader";
 
@@ -41,14 +45,15 @@ export default function PricingComponent() {
       <main className="p-8">
         <div className="max-w-6xl mx-auto space-y-8">
           <div className="text-center space-y-4">
-            <h1 className="text-4xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-purple-600 to-indigo-600 dark:from-purple-400 dark:to-indigo-400">
-              Bodhi Pricing Plans
-            </h1>
+            <span className="text-4xl ml-2 font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-purple-600 to-pink-600 dark:from-purple-400 dark:to-pink-400">
+              Bodhi Pricing
+            </span>
+
             <p className="text-xl text-gray-600 dark:text-gray-300">
-              Choose the perfect plan for your AI needs
+              Flexible, pay-as-you-go pricing for your AI needs
             </p>
           </div>
-          <div className="grid md:grid-cols-2 gap-8">
+          {/* <div className="grid md:grid-cols-2 gap-8">
             {Object.entries(pricing).map(([key, plan]: [string, Pricings]) => (
               <Card
                 key={key}
@@ -88,8 +93,104 @@ export default function PricingComponent() {
                 </CardFooter>
               </Card>
             ))}
-          </div>
-         <Footer/>
+          </div> */}
+
+          <Tabs defaultValue="standard" className="w-full">
+            <TabsList className="grid w-full grid-cols-2 rounded-[4px] bg-gray-200 dark:bg-gray-700 p-1">
+              <TabsTrigger
+                value="standard"
+                className="rounded-[4px] text-purple-600 dark:text-purple-400 transition-all duration-300 data-[state=active]:bg-gradient-to-r from-purple-500 to-purple-600 data-[state=active]:text-white data-[state=active]:dark:text-white"
+              >
+                Standard
+              </TabsTrigger>
+              <TabsTrigger
+                value="extended"
+                className="rounded-[4px] text-indigo-600 dark:text-indigo-300 transition-all duration-300 data-[state=active]:bg-gradient-to-r from-indigo-500 to-indigo-600 data-[state=active]:text-white data-[state=active]:dark:text-white"
+              >
+                Extended
+              </TabsTrigger>
+            </TabsList>
+            <TabsContent value="standard">
+              <Card className="border-purple-200 dark:border-purple-800 rounded-[4px]">
+                <CardHeader className="py-12 bg-gradient-to-r from-purple-500 to-purple-600 text-white flex flex-row justify-between items-center">
+                  <div>
+                    <CardTitle className="text-2xl">
+                      Prompts up to 128k tokens
+                    </CardTitle>
+                    <CardDescription className="text-purple-100">
+                      Ideal for most use cases
+                    </CardDescription>
+                  </div>
+                  <Zap className="h-12 w-12 text-purple-300" />
+                </CardHeader>
+                <CardContent className="p-6">
+                  <div className="space-y-4">
+                    <div className="flex justify-between items-center pb-2 border-b border-gray-200 dark:border-gray-700">
+                      <span className="font-semibold">Input Pricing</span>
+                      <span className="text-lg font-bold text-purple-600 dark:text-purple-400">
+                        $0.075 / 1M tokens
+                      </span>
+                    </div>
+                    <div className="flex justify-between items-center pb-2 border-b border-gray-200 dark:border-gray-700">
+                      <span className="font-semibold">Output Pricing</span>
+                      <span className="text-lg font-bold text-purple-600 dark:text-purple-400">
+                        $0.30 / 1M tokens
+                      </span>
+                    </div>
+                    <div className="flex justify-between items-center pb-2 border-b border-gray-200 dark:border-gray-700">
+                      <span className="font-semibold">Basic Support</span>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span className="font-semibold">
+                        Ideal for most use cases
+                      </span>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </TabsContent>
+            <TabsContent value="extended">
+              <Card className="border-indigo-200 dark:border-indigo-800 rounded-[4px]">
+                <CardHeader className="py-12 bg-gradient-to-r from-indigo-500 to-indigo-600 text-white flex flex-row justify-between items-center">
+                  <div>
+                    <CardTitle className="text-2xl">
+                      Prompts longer than 128k tokens
+                    </CardTitle>
+                    <CardDescription className="text-indigo-100">
+                      For advanced use cases
+                    </CardDescription>
+                  </div>
+                  <Shield className="h-10 w-10 text-blue-300" />
+                </CardHeader>
+                <CardContent className="p-6">
+                  <div className="space-y-4">
+                    <div className="flex justify-between items-center pb-2 border-b border-gray-200 dark:border-gray-700">
+                      <span className="font-semibold">Input Pricing</span>
+                      <span className="text-lg font-bold text-indigo-600 dark:text-indigo-400">
+                        $0.15 / 1M tokens
+                      </span>
+                    </div>
+                    <div className="flex justify-between items-center pb-2 border-b border-gray-200 dark:border-gray-700">
+                      <span className="font-semibold">Output Pricing</span>
+                      <span className="text-lg font-bold text-indigo-600 dark:text-indigo-400">
+                        $0.60 / 1M tokens
+                      </span>
+                    </div>
+                    <div className="flex justify-between items-center pb-2 border-b border-gray-200 dark:border-gray-700">
+                      <span className="font-semibold">Priority Support</span>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span className="font-semibold">
+                        Suitable for advanced use cases
+                      </span>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </TabsContent>
+          </Tabs>
+
+          <Footer />
         </div>
       </main>
     </div>
