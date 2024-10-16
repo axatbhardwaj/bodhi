@@ -11,7 +11,6 @@ import {
 import { Brain, Moon, Sun, LogOut, X, Menu } from "lucide-react";
 import Link from "next/link";
 import { useTheme } from "next-themes";
-import TopupDialog from "../Topup";
 import { signOut } from "next-auth/react";
 import TokenUsage from "../TokenUsage";
 import { useAccount } from "wagmi";
@@ -66,18 +65,61 @@ export default function ChatHeader({
         <div className="ml-auto flex items-center">
           <nav className="hidden xl:flex items-center space-x-4">
             {chatnavitems.length > 0 ? (
-              chatnavitems.map((item: any) => (
-                <Link
-                  className="text-sm font-medium hover:text-purple-600 dark:hover:text-purple-400 transition-colors"
-                  href={item.href}
-                  key={item.id}
-                >
-                  {item.name}
-                </Link>
-              ))
+              chatnavitems.map((item: any) => {
+                const isTopup = item.name.toLowerCase() === "topup";
+
+                if (isTopup && address) {
+                  return (
+                    <Link
+                      className="text-sm font-medium hover:text-purple-600 dark:hover:text-purple-400 transition-colors"
+                      href={item.href}
+                      key={item.id}
+                    >
+                      {item.name}
+                    </Link>
+                  );
+                }
+                if (!isTopup) {
+                  return (
+                    <Link
+                      className="text-sm font-medium hover:text-purple-600 dark:hover:text-purple-400 transition-colors"
+                      href={item.href}
+                      key={item.id}
+                    >
+                      {item.name}
+                    </Link>
+                  );
+                }
+              })
             ) : (
               <div>No items</div>
             )}
+
+            {isConnecting ||
+              (address && (
+                <div className="text-sm font-medium ml-[12px]">
+                  Balance:{" "}
+                  <span className="text-green-600 dark:text-green-400">
+                    {(Number(amount) / Number(1e18))?.toString() || "0"} BODHI
+                  </span>
+                </div>
+              ))}
+
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => setTheme(isDarkMode ? "light" : "dark")}
+              className="rounded-full"
+              aria-label="Toggle dark mode"
+            >
+              {mounted &&
+                (isDarkMode ? (
+                  <Sun className="h-5 w-5 hover:text-purple-600" />
+                ) : (
+                  <Moon className="h-5 w-5 hover:text-purple-600" />
+                ))}
+            </Button>
+
             <Select value={model} onValueChange={setModel}>
               <SelectTrigger className="w-[180px] h-[36px] rounded-[4px]">
                 <SelectValue placeholder="Select AI Model" />
@@ -91,39 +133,16 @@ export default function ChatHeader({
                 </SelectItem>
               </SelectContent>
             </Select>
+
             <TokenUsage
               TokenUsage={handleTokenUsage}
               isDisabled={isDisabled}
               tokenCount={token}
             />
-
-            {isConnecting || (address && <TopupDialog />)}
           </nav>
-          {isConnecting ||
-            (address && (
-              <div className="text-sm font-medium ml-[12px]">
-                Balance:{" "}
-                <span className="text-green-600 dark:text-green-400">
-                  {(Number(amount) / Number(1e18))?.toString() || "0"} BODHI
-                </span>
-              </div>
-            ))}
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={() => setTheme(isDarkMode ? "light" : "dark")}
-            className="rounded-full"
-            aria-label="Toggle dark mode"
-          >
-            {mounted &&
-              (isDarkMode ? (
-                <Sun className="h-5 w-5 hover:text-purple-600" />
-              ) : (
-                <Moon className="h-5 w-5 hover:text-purple-600" />
-              ))}
-          </Button>
-          <div className="hidden sm:flex">
-          <ConnectKitButton />
+
+          <div className="hidden sm:flex ml-4">
+            <ConnectKitButton />
           </div>
           {
             <Button
@@ -180,24 +199,39 @@ export default function ChatHeader({
             tokenCount={token}
           />
           {chatnavitems.length > 0 ? (
-            chatnavitems.map((item: any) => (
-              <Link
-                className="text-sm cursor-pointer text-center font-medium hover:text-purple-600 dark:hover:text-purple-400 transition-colors"
-                href={item.href}
-                key={item.id}
-              >
-                {item.name}
-              </Link>
-            ))
+            chatnavitems.map((item: any) => {
+              const isTopup = item.name.toLowerCase() === "topup";
+
+              if (isTopup && address) {
+                return (
+                  <Link
+                    className="text-sm font-medium hover:text-purple-600 dark:hover:text-purple-400 transition-colors text-center p-2"
+                    href={item.href}
+                    key={item.id}
+                  >
+                    {item.name}
+                  </Link>
+                );
+              }
+              if (!isTopup) {
+                return (
+                  <Link
+                    className="text-sm font-medium hover:text-purple-600 dark:hover:text-purple-400 transition-colors text-center p-2"
+                    href={item.href}
+                    key={item.id}
+                  >
+                    {item.name}
+                  </Link>
+                );
+              }
+            })
           ) : (
             <div>No items</div>
           )}
           <div className="flex justify-center">
             <ConnectKitButton />
           </div>
-          <div className="flex justify-center">
-            {isConnecting || (address && <TopupDialog />)}
-          </div>
+
           <Button
             variant="ghost"
             className="hover:text-purple-600"

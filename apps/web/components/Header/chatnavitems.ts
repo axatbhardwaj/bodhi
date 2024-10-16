@@ -9,4 +9,14 @@ export const chatnavitems = [
     href: "/dashboard",
     name: "Dashboard",
   },
+  {
+    id: 3,
+    href: "/pricing",
+    name: "Pricing",
+  },
+  {
+    id: 4,
+    href: "/topup",
+    name: "Topup",
+  },
 ];
