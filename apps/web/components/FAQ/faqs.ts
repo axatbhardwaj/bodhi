@@ -10,7 +10,7 @@ export const faqs = [
   {
     question: "What Role does blockchain play in the process",
     answer:
-      "Users can purchase the bodhi tokens via solana to use the chatbot queries",
+      "Users can purchase the bodhi tokens via FUSDC tokens to use the chatbot queries",
   },
   {
     question: "Who are bodhi's target audience?",
