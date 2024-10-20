@@ -33,7 +33,7 @@ export const Top = ({ balanceBodhi, balanceFUSDC }: Props) => {
         </Button>
       </header>
       <p className="mt-4 text-gray-600 dark:text-gray-400">
-        Swap Fake USDC for BODHI tokens to use in your AI conversations.
+        Buy BODHI tokens with Fake USDC to use in your AI conversations.
       </p>
 
       <p className="text-2xl font-bold my-4 text-center">Current Balance</p>

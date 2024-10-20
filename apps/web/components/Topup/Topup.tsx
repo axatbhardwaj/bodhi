@@ -279,7 +279,7 @@ export default function Topup() {
             {/*Amount of Fake USDC you want to swap*/}
             <div className="space-y-2">
               <label htmlFor="fsudc-amount" className="text-sm font-medium">
-                Amount of fusdc you want to swap
+                Amount of FUSDC you want to spend
               </label>
               <Input
                 id="fsudc-amount"
@@ -320,7 +320,7 @@ export default function Topup() {
               onClick={handleSwapFUSDC}
               disabled={SwapButtonLoading}
             >
-              Swap and Top Up
+              Top Up
             </Button>
           </div>
         </div>
