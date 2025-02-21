@@ -7,6 +7,9 @@
         "start": "node dist/index.js",
         "dev": "npm run build && npm run start"
     },
+    "workspaces": {
+        "nohoist": ["@repo/typescript-config"]
+      },
     "keywords": [],
     "author": "",
     "license": "ISC",
