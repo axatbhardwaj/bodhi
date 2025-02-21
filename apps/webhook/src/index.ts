@@ -24,4 +24,5 @@ app.listen(PORT, () => {
   console.log(`Listening on PORT ${PORT}`);
 });
 
+export default app;
 // export const handler = serverlessExpress({ app });

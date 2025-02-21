@@ -16,7 +16,7 @@ router.post("/tokencount", async (req, res) => {
   const { prompt } = query;
 
   const genAI = new GoogleGenerativeAI(API_KEY || "");
-  const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+  const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
 
   try {
     const countResult = await model.countTokens(prompt);
@@ -51,9 +51,10 @@ router.post(`/prompt`, async (req, res) => {
       },
       success: true,
     });
-  } catch (e) {
+  } catch (e:any) {
     res.json({
       success: false,
+      error:e.mesage
     });
   }
 });
