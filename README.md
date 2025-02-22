@@ -105,6 +105,11 @@ Bodhi leverages a range of modern technologies to deliver a fast, scalable, and 
 
    The application will be available at `http://localhost:3000`.
 
+## Live Link
+```
+https://bodhi-pi.vercel.app/
+```
+
 ## Reference
 
 For more details, visit the [Bodhi Documentation](https://marred-forger-0bc.notion.site/Bodhi-Documentation-1198f73b891b8041bba4fd9e8cac28f3).
