@@ -12,6 +12,11 @@ router.get("/", (req, res) => {
 router.post("/tokencount", async (req, res) => {
   const API_KEY = process.env.GEMINI_API_KEY;
 
+  if(!API_KEY) {
+    res.status(404).json({
+      message:"No api key"
+    })
+  }
   const { query } = req.body;
   const { prompt } = query;
 
@@ -36,7 +41,11 @@ router.post(`/prompt`, async (req, res) => {
   const API_KEY = process.env.GEMINI_API_KEY;
   const { query } = req.body;
   const { prompt } = query;
-
+  if(!API_KEY) {
+    res.status(404).json({
+      message:"No api key"
+    })
+  }
   const genAI = new GoogleGenerativeAI(API_KEY || "");
   const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
@@ -54,7 +63,8 @@ router.post(`/prompt`, async (req, res) => {
   } catch (e:any) {
     res.json({
       success: false,
-      error:e.mesage
+      error:e.mesage,
+      e:e
     });
   }
 });
